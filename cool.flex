@@ -45,8 +45,8 @@ extern YYSTYPE cool_yylval;
  *  Add Your own definitions here
  */
 
-char string_const[MAX_STR_CONST];
-int string_const_len;
+char str_const[MAX_STR_CONST];
+int str_len;
 bool str_contain_null_char;
 
 %}
@@ -166,8 +166,8 @@ f[aA][lL][sS][eE]	{
   */
 
 \"	{
-	memset(string_const, 0, sizeof string_const);
-	string_const_len = 0; str_contain_null_char = false;
+	memset(str_const, 0, sizeof str_const);
+	str_len = 0; str_contain_null_char = false;
 	BEGIN STRING;
 }
 
@@ -177,23 +177,23 @@ f[aA][lL][sS][eE]	{
 }
 
 <STRING>\\.		{
-	if (string_const_len >= MAX_STR_CONST) {
+	if (str_len >= MAX_STR_CONST) {
 		strcpy(cool_yylval.error_msg, "String constant too long");
 		BEGIN 0; return (ERROR);
 	}
 	else{
 		switch(yytext[1]) {
-			case 'n' : string_const[string_const_len] = '\n'; break;
-			case 't' : string_const[string_const_len] = '\t'; break;
-			case 'b' : string_const[string_const_len] = '\b'; break;
-			case 'f' : string_const[string_const_len] = '\f'; break;
-			case '\"': string_const[string_const_len] = '\"'; break;
-			case '\\': string_const[string_const_len] = '\\'; break;
-			case '0' : string_const[string_const_len] = 0; 
+			case 'n' : str_const[str_len] = '\n'; break;
+			case 't' : str_const[str_len] = '\t'; break;
+			case 'b' : str_const[str_len] = '\b'; break;
+			case 'f' : str_const[str_len] = '\f'; break;
+			case '\"': str_const[str_len] = '\"'; break;
+			case '\\': str_const[str_len] = '\\'; break;
+			case '0' : str_const[str_len] = 0; 
 				   str_contain_null_char = true; break;
-			default  : string_const[string_const_len] = yytext[1];
+			default  : str_const[str_len] = yytext[1];
 		}
-		string_const_len++;
+		str_len++;
 
 	}
 }
@@ -206,20 +206,20 @@ f[aA][lL][sS][eE]	{
 }
 
 <STRING>\"		{ 
-	if (string_const_len > 1 && str_contain_null_char) {
+	if (str_len > 1 && str_contain_null_char) {
 		strcpy(cool_yylval.error_msg, "String contains null character");
 		BEGIN 0; return (ERROR);
 	}
-	cool_yylval.symbol = stringtable.add_string(string_const);
+	cool_yylval.symbol = stringtable.add_string(str_const);
 	BEGIN 0; return (STR_CONST);
 }
 
 <STRING>.		{ 
-	if (string_const_len >= MAX_STR_CONST) {
+	if (str_len >= MAX_STR_CONST) {
 		strcpy(cool_yylval.error_msg, "String constant too long");
 		BEGIN 0; return (ERROR);
 	} 
-	string_const[string_const_len++] = yytext[0]; 
+	str_const[str_len++] = yytext[0]; 
 }
 
  /*
