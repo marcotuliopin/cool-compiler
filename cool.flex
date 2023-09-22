@@ -128,24 +128,25 @@ CHAR			[A-Za-z0-9_]
   * which must begin with a lower-case letter.
   */
 
-(?i:CLASS)		{ return (CLASS); }
-(?i:ELSE)		{ return (ELSE); }
-(?i:FI)			{ return (FI); }
-(?i:IF)			{ return (IF); }
-(?i:IN)			{ return (IN); }
-(?i:INHERITS)	{ return (INHERITS); }
-(?i:LET)		{ return (LET); }
-(?i:LOOP)		{ return (LOOP); }
-(?i:POOL)		{ return (POOL); }
-(?i:THEN)		{ return (THEN); }
-(?i:WHILE)		{ return (WHILE); }
-(?i:CASE)		{ return (CASE); }
-(?i:ESAC)		{ return (ESAC); }
-(?i:OF)			{ return (OF); }
-(?i:NEW)		{ return (NEW); }
-(?i:LE)			{ return (LE); }
-(?i:NOT)		{ return (NOT); }
-(?i:ISVOID)		{ return (ISVOID); }
+[Cc][Ll][Aa][Ss][Ss]				{ return (CLASS); }
+[Ee][Ll][Ss][Ee] 					{ return (ELSE); }
+[Ff][Ii] 							{ return (FI); }
+[Ii][Ff] 							{ return (IF); }
+[Ii][Nn] 							{ return (IN); }
+[Ii][Nn][Hh][Ee][Rr][Ii][Tt][Ss] 	{ return (INHERITS); }
+[Ll][Ee][Tt] 						{ return (LET); }
+[Ll][Oo][Oo][Pp] 					{ return (LOOP); }
+[Pp][Oo][Oo][Ll] 					{ return (POOL); }
+[Tt][Hh][Ee][Nn] 					{ return (THEN); }
+[Ww][Hh][Ii][Ll][Ee] 				{ return (WHILE); }
+[Cc][Aa][Ss][Ee] 					{ return (CASE); }
+[Ee][Ss][Aa][Cc] 					{ return (ESAC); }
+[Oo][Ff] 							{ return (OF); }
+[Nn][Ee][Ww] 						{ return (NEW); }
+[Ll][Ee] 							{ return (LE); }
+[Nn][Oo][Tt] 						{ return (NOT); }
+[Ii][Ss][Vv][Oo][Ii][Dd] 			{ return (ISVOID); }
+
 
 t[rR][uU][eE]		{ 
 	cool_yylval.boolean = 1;
