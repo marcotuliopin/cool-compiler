@@ -179,17 +179,21 @@ f[aA][lL][sS][eE]	{
 	if (string_const_len >= MAX_STR_CONST) {
 		strcpy(cool_yylval.error_msg, "String constant too long");
 		BEGIN 0; return (ERROR);
-	} 
-	switch(yytext[1]) {
-		case '\"': string_const[string_const_len++] = '\"'; break;
-		case '\\': string_const[string_const_len++] = '\\'; break;
-		case 'b' : string_const[string_const_len++] = '\b'; break;
-		case 'f' : string_const[string_const_len++] = '\f'; break;
-		case 'n' : string_const[string_const_len++] = '\n'; break;
-		case 't' : string_const[string_const_len++] = '\t'; break;
-		case '0' : string_const[string_const_len++] = 0; 
-			   str_contain_null_char = true; break;
-		default  : string_const[string_const_len++] = yytext[1];
+	}
+	else{
+		switch(yytext[1]) {
+			case 'n' : string_const[string_const_len] = '\n'; break;
+			case 't' : string_const[string_const_len] = '\t'; break;
+			case 'b' : string_const[string_const_len] = '\b'; break;
+			case 'f' : string_const[string_const_len] = '\f'; break;
+			case '\"': string_const[string_const_len] = '\"'; break;
+			case '\\': string_const[string_const_len] = '\\'; break;
+			case '0' : string_const[string_const_len] = 0; 
+				   str_contain_null_char = true; break;
+			default  : string_const[string_const_len] = yytext[1];
+		}
+		string_const_len++;
+
 	}
 }
 
