@@ -253,13 +253,14 @@ f[aA][lL][sS][eE]	{
   *  Integers and identifiers.
   */
 
-[{DIGIT}+([{UPPER}{LOWER}]{CHAR}*)]		{
+{DIGIT}+				{ 
 	cool_yylval.symbol = inttable.add_string(yytext); 
-	REJECT;
+	return (INT_CONST);
 }
 
-{DIGIT}+				{ 
-	return (INT_CONST);
+({UPPER}|{LOWER}){CHAR}*	{
+	cool_yylval.symbol = idtable.add_string(yytext); 
+	REJECT;
 }
 
 {UPPER}{CHAR}*	{
@@ -269,6 +270,7 @@ f[aA][lL][sS][eE]	{
 {LOWER}{CHAR}*	{
 	return (OBJECTID);
 }
+
 
  /*
   *  Other errors.
