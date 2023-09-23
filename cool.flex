@@ -56,9 +56,9 @@ bool str_contain_null_char;
   */
 
 %option noyywrap
-%x LINE_COMMENT BLOCK_COMMENT STRING
+%x inline_comment multiline_comment STRING
 
-DARROW			=>
+SETA			=>
 ASSIGN			<-
 LE			<=
 DIGIT 			[0-9]
@@ -68,29 +68,33 @@ CHAR			[A-Za-z0-9_]
 
 %%
 
-<INITIAL,BLOCK_COMMENT>\n { curr_lineno++; }
+<INITIAL,multiline_comment>\n { curr_lineno++; }
 [ \t\r\v\f]+	{}
  
  /*
   *  Nested comments
   */
 
-"--"			{ BEGIN LINE_COMMENT; }
-"(\*"			{ BEGIN BLOCK_COMMENT; }
+"--"			{ BEGIN(inline_comment); }
+"(\*"			{ BEGIN(multiline_comment); }
 "\*)"			{
 	strcpy(cool_yylval.error_msg, "Unmatched *)");
 	return (ERROR);
 }
 
-<LINE_COMMENT>\n	{ BEGIN 0; curr_lineno++; }
-<BLOCK_COMMENT>"\*)"	{ BEGIN 0; }
-<BLOCK_COMMENT><<EOF>>	{ 
+<inline_comment>\n	{
+	BEGIN (0); 
+	curr_lineno++; 
+}
+<multiline_comment>"\*)"	{ BEGIN(0); }
+<multiline_comment><<EOF>>	{ 
 	strcpy(cool_yylval.error_msg, "EOF in comment");
-	BEGIN 0; return (ERROR);
+	BEGIN(0); 
+	return (ERROR);
 }
 
-<LINE_COMMENT>.			{}
-<BLOCK_COMMENT>.		{}
+<inline_comment>.			|
+<multiline_comment>.		{}
 
  /*
   *  The multiple-character operators.
@@ -98,7 +102,7 @@ CHAR			[A-Za-z0-9_]
 
 {ASSIGN}		{ return (ASSIGN); }
 {LE}			{ return (LE); }
-{DARROW} 		{ return (DARROW); }
+{SETA} 		{ return (SETA); }
 
 
  /*
@@ -168,18 +172,18 @@ f[aA][lL][sS][eE]	{
 \"	{
 	memset(str_const, 0, sizeof str_const);
 	str_len = 0; str_contain_null_char = false;
-	BEGIN STRING;
+	BEGIN(STRING);
 }
 
 <STRING><<EOF>>	{
 	strcpy(cool_yylval.error_msg, "EOF in string constant");
-	BEGIN 0; return (ERROR);
+	BEGIN(0); return (ERROR);
 }
 
 <STRING>\\.		{
 	if (str_len >= MAX_STR_CONST) {
 		strcpy(cool_yylval.error_msg, "String constant too long");
-		BEGIN 0; return (ERROR);
+		BEGIN(0); return (ERROR);
 	}
 	else{
 		switch(yytext[1]) {
@@ -202,22 +206,22 @@ f[aA][lL][sS][eE]	{
 <STRING>\n		{
 	curr_lineno++;
 	strcpy(cool_yylval.error_msg, "Unterminated string constant");
-	BEGIN 0; return (ERROR);
+	BEGIN(0); return (ERROR);
 }
 
 <STRING>\"		{ 
 	if (str_len > 1 && str_contain_null_char) {
 		strcpy(cool_yylval.error_msg, "String contains null character");
-		BEGIN 0; return (ERROR);
+		BEGIN(0); return (ERROR);
 	}
 	cool_yylval.symbol = stringtable.add_string(str_const);
-	BEGIN 0; return (STR_CONST);
+	BEGIN(0); return (STR_CONST);
 }
 
 <STRING>.		{ 
 	if (str_len >= MAX_STR_CONST) {
 		strcpy(cool_yylval.error_msg, "String constant too long");
-		BEGIN 0; return (ERROR);
+		BEGIN(0); return (ERROR);
 	} 
 	str_const[str_len++] = yytext[0]; 
 }
