@@ -83,13 +83,13 @@ CHAR			[A-Za-z0-9_]
 }
 
 <inline_comment>\n	{
-	BEGIN(0); 
+	BEGIN(INITIAL); 
 	curr_lineno++; 
 }
-<multiline_comment>"\*)"	{ BEGIN(0); }
+<multiline_comment>"\*)"	{ BEGIN(INITIAL); }
 <multiline_comment><<EOF>>	{ 
 	strcpy(cool_yylval.error_msg, "EOF in comment");
-	BEGIN(0); 
+	BEGIN(INITIAL); 
 	return (ERROR);
 }
 
@@ -178,14 +178,14 @@ f[aA][lL][sS][eE]	{
 
 <strings><<EOF>>	{
 	strcpy(cool_yylval.error_msg, "String constant cannot have end of file (EOF)");
-	BEGIN(0); 
+	BEGIN(INITIAL); 
 	return (ERROR);
 }
 
 <strings>\\.		{
 	if (str_len >= MAX_STR_CONST) {
 		strcpy(cool_yylval.error_msg, "String constant exceeds maximum size");
-		BEGIN(0); 
+		BEGIN(INITIAL); 
 		return (ERROR);
 	}
 	else{
@@ -220,28 +220,29 @@ f[aA][lL][sS][eE]	{
 }
 
 <strings>\\\n	{ curr_lineno++; }
+
 <strings>\n		{
 	curr_lineno++;
 	strcpy(cool_yylval.error_msg, "Unterminated string constant");
-	BEGIN(0); 
+	BEGIN(INITIAL); 
 	return (ERROR);
 }
 
 <strings>\"		{ 
 	if (str_len > 1 && str_contain_null_char) {
 		strcpy(cool_yylval.error_msg, "String constant cannot contain null character");
-		BEGIN(0); 
+		BEGIN(INITIAL); 
 		return (ERROR);
 	}
 	cool_yylval.symbol = stringtable.add_string(str_const);
-	BEGIN(0); 
+	BEGIN(INITIAL); 
 	return (STR_CONST);
 }
 
 <strings>.		{ 
 	if (str_len >= MAX_STR_CONST) {
 		strcpy(cool_yylval.error_msg, "String constant exceeds maximum size");
-		BEGIN(0); 
+		BEGIN(INITIAL); 
 		return (ERROR);
 	} 
 	str_const[str_len] = yytext[0]; 
@@ -252,18 +253,20 @@ f[aA][lL][sS][eE]	{
   *  Integers and identifiers.
   */
 
-{DIGIT}+				{ 
+[{DIGIT}+([{UPPER}{LOWER}]{CHAR}*)]		{
 	cool_yylval.symbol = inttable.add_string(yytext); 
+	REJECT;
+}
+
+{DIGIT}+				{ 
 	return (INT_CONST);
 }
 
 {UPPER}{CHAR}*	{
-	cool_yylval.symbol = idtable.add_string(yytext);
 	return (TYPEID);
 }
 
 {LOWER}{CHAR}*	{
-	cool_yylval.symbol = idtable.add_string(yytext);
 	return (OBJECTID);
 }
 
