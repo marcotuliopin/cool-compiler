@@ -68,7 +68,7 @@ CHAR			[A-Za-z0-9_]
 
 %%
 
-<inline_comment>\n	{
+<inline_comment, strings>\n	{
 	BEGIN(INITIAL); 
 	REJECT;
 }
@@ -116,18 +116,18 @@ CHAR			[A-Za-z0-9_]
 "}"			{ return '}'; }
 "("			{ return '('; }
 ")"			{ return ')'; }
-"~"			{ return '~'; }
-","			{ return ','; }
-";"			{ return ';'; }
-":"			{ return ':'; }
 "+"			{ return '+'; }
 "-"			{ return '-'; }
 "*"			{ return '*'; }
 "/"			{ return '/'; }
-"%"			{ return '%'; }
-"."			{ return '.'; }
 "<"			{ return '<'; }
 "="			{ return '='; }
+"~"			{ return '~'; }
+","			{ return ','; }
+";"			{ return ';'; }
+":"			{ return ':'; }
+"%"			{ return '%'; }
+"."			{ return '.'; }
 "@"			{ return '@'; }
 
  /*
@@ -224,9 +224,7 @@ f[aA][lL][sS][eE]	{
 
 
 <strings>\n		{
-	curr_lineno++;
 	strcpy(cool_yylval.error_msg, "Unterminated string constant");
-	BEGIN(INITIAL); 
 	return (ERROR);
 }
 
