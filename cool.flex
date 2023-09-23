@@ -171,19 +171,20 @@ f[aA][lL][sS][eE]	{
 
 \"	{
 	memset(str_const, 0, sizeof str_const);
-	str_len = 0; str_contain_null_char = false;
+	str_len = 0; 
+	str_contain_null_char = false;
 	BEGIN(strings);
 }
 
 <strings><<EOF>>	{
-	strcpy(cool_yylval.error_msg, "EOF in string constant");
+	strcpy(cool_yylval.error_msg, "String constant cannot have end of file (EOF)");
 	BEGIN(0); 
 	return (ERROR);
 }
 
 <strings>\\.		{
 	if (str_len >= MAX_STR_CONST) {
-		strcpy(cool_yylval.error_msg, "String constant too long");
+		strcpy(cool_yylval.error_msg, "String constant exceeds maximum size");
 		BEGIN(0); 
 		return (ERROR);
 	}
@@ -228,7 +229,7 @@ f[aA][lL][sS][eE]	{
 
 <strings>\"		{ 
 	if (str_len > 1 && str_contain_null_char) {
-		strcpy(cool_yylval.error_msg, "String contains null character");
+		strcpy(cool_yylval.error_msg, "String constant cannot contain null character");
 		BEGIN(0); 
 		return (ERROR);
 	}
@@ -239,7 +240,7 @@ f[aA][lL][sS][eE]	{
 
 <strings>.		{ 
 	if (str_len >= MAX_STR_CONST) {
-		strcpy(cool_yylval.error_msg, "String constant too long");
+		strcpy(cool_yylval.error_msg, "String constant exceeds maximum size");
 		BEGIN(0); 
 		return (ERROR);
 	} 
