@@ -68,7 +68,13 @@ CHAR			[A-Za-z0-9_]
 
 %%
 
-<INITIAL,multiline_comment>\n { curr_lineno++; }
+<inline_comment>\n	{
+	BEGIN(INITIAL); 
+	REJECT;
+}
+<INITIAL,multiline_comment>\n |
+<strings>\\\n	{ curr_lineno++; }
+
 [ \t\r\v\f]+	{}
  
  /*
@@ -77,15 +83,12 @@ CHAR			[A-Za-z0-9_]
 
 "--"			{ BEGIN(inline_comment); }
 "(\*"			{ BEGIN(multiline_comment); }
+
 "\*)"			{
 	strcpy(cool_yylval.error_msg, "Unmatched *)");
 	return (ERROR);
 }
 
-<inline_comment>\n	{
-	BEGIN(INITIAL); 
-	curr_lineno++; 
-}
 <multiline_comment>"\*)"	{ BEGIN(INITIAL); }
 <multiline_comment><<EOF>>	{ 
 	strcpy(cool_yylval.error_msg, "EOF in comment");
@@ -219,7 +222,6 @@ f[aA][lL][sS][eE]	{
 	}
 }
 
-<strings>\\\n	{ curr_lineno++; }
 
 <strings>\n		{
 	curr_lineno++;
