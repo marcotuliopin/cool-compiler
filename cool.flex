@@ -172,16 +172,16 @@ f[aA][lL][sS][eE]	{
 \"	{
 	memset(str_const, 0, sizeof str_const);
 	str_len = 0; str_contain_null_char = false;
-	BEGIN(STRING);
+	BEGIN(strings);
 }
 
-<STRING><<EOF>>	{
+<strings><<EOF>>	{
 	strcpy(cool_yylval.error_msg, "EOF in string constant");
 	BEGIN(0); 
 	return (ERROR);
 }
 
-<STRING>\\.		{
+<strings>\\.		{
 	if (str_len >= MAX_STR_CONST) {
 		strcpy(cool_yylval.error_msg, "String constant too long");
 		BEGIN(0); 
@@ -218,15 +218,15 @@ f[aA][lL][sS][eE]	{
 	}
 }
 
-<STRING>\\\n	{ curr_lineno++; }
-<STRING>\n		{
+<strings>\\\n	{ curr_lineno++; }
+<strings>\n		{
 	curr_lineno++;
 	strcpy(cool_yylval.error_msg, "Unterminated string constant");
 	BEGIN(0); 
 	return (ERROR);
 }
 
-<STRING>\"		{ 
+<strings>\"		{ 
 	if (str_len > 1 && str_contain_null_char) {
 		strcpy(cool_yylval.error_msg, "String contains null character");
 		BEGIN(0); 
@@ -237,13 +237,14 @@ f[aA][lL][sS][eE]	{
 	return (STR_CONST);
 }
 
-<STRING>.		{ 
+<strings>.		{ 
 	if (str_len >= MAX_STR_CONST) {
 		strcpy(cool_yylval.error_msg, "String constant too long");
 		BEGIN(0); 
 		return (ERROR);
 	} 
-	str_const[str_len++] = yytext[0]; 
+	str_const[str_len] = yytext[0]; 
+	str_len++;
 }
 
  /*
