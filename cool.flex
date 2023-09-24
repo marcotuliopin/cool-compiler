@@ -48,6 +48,7 @@ extern YYSTYPE cool_yylval;
 char str_const[MAX_STR_CONST];
 int str_len;
 bool str_contain_null_char;
+bool str_contain_new_line;
 
 %}
 
