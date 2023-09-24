@@ -75,6 +75,7 @@ CHAR			[A-Za-z0-9_]
 <INITIAL,multiline_comment>\n |
 <strings>\\\n	{ curr_lineno++; }
 
+[ \t\r\v\f]+	{}
  
  /*
   *  Nested comments
@@ -88,10 +89,6 @@ CHAR			[A-Za-z0-9_]
 	return (ERROR);
 }
 
-<inline_comment>\n	{
-	BEGIN(INITIAL); 
-	curr_lineno++;
-}
 <multiline_comment>"\*)"	{ BEGIN(INITIAL); }
 <multiline_comment><<EOF>>	{ 
 	strcpy(cool_yylval.error_msg, "EOF in comment");
