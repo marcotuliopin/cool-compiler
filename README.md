@@ -13,23 +13,23 @@ Dividimos a documentação desse trabalho na explicação das definições e das
 ### Definições
 
 Começamos nossas definições por três variáveis auxiliares na execução do lexer:
-- str_const (char*): armazena a string sendo lida.
-- str_len (int): captura o comprimento de uma string sendo lida.
-- str_contain_null_char (bool): captura a existência de um caractere nulo em uma string.
+- **str_const (char*)**: armazena a string sendo lida.
+- **str_len (int)**: captura o comprimento de uma string sendo lida.
+- **str_contain_null_char (bool)**: captura a existência de um caractere nulo em uma string.
 
 Também definimos três estados de início para as nossas regras:
-- *inline_comment*: é ativado quando há a leitura de um marcador de começo de comentário "--", e é desativado quando lê-se uma nova linha "\n".
-- *multiline_comment*: é ativado quando há a leitura de um marcador de começo de comentário "(\*" e é desativado quando lê-se um marcador de fim de comentário "\*)".
-- *strings*: é ativado quando há a leitura de um marcador de começo de string (aspas) e é desativado quando lê-se um marcador de fim de string.
+- **inline_comment**: é ativado quando há a leitura de um marcador de começo de comentário "--", e é desativado quando lê-se uma nova linha "\n".
+- **multiline_comment**: é ativado quando há a leitura de um marcador de começo de comentário "(\*" e é desativado quando lê-se um marcador de fim de comentário "\*)".
+- **strings**: é ativado quando há a leitura de um marcador de começo de string (aspas) e é desativado quando lê-se um marcador de fim de string.
 Os estados podem também ser desativados prematuramente em caso de erro, como por exemplo a leitura de um caracter *EOF* (end-of-file) em uma string.
 
 Por último, temos macros para expressões regulares:
-- ASSIGN: símbolo de atribuição (<-).
-- LE: simbolo de menor ou igual (<=).
-- DIGIT: dígitos de 0 a 9 ([0-9]).
-- UPPER: letras maiúsculas ([A-Z]).
-- LOWER: letras minúsculas ([a-z]).
-- CHAR: letras, dígitos ou underscore ([A-Za-z0-9_]).
+- **ASSIGN**: símbolo de atribuição (<-).
+- **LE**: simbolo de menor ou igual (<=).
+- **DIGIT**: dígitos de 0 a 9 ([0-9]).
+- **UPPER**: letras maiúsculas ([A-Z]).
+- **LOWER**: letras minúsculas ([a-z]).
+- **CHAR**: letras, dígitos ou underscore ([A-Za-z0-9_]).
 Essas macros nos permite maior legibilidade e facilidade de escrita na implementação do lexer.
 
 --------------------------
