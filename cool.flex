@@ -230,7 +230,7 @@ f[aA][lL][sS][eE]	{
 <strings>\"		{ 
 	BEGIN(INITIAL);
 	if (str_len > 1 && str_contain_null_char) {
-		strcpy(cool_yylval.error_msg, "String constant cannot contain null character");
+		strcpy(cool_yylval.error_msg, "String contains null character");
 		return (ERROR);
 	}
 	if (str_contain_new_line) {
