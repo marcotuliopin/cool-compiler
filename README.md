@@ -13,7 +13,7 @@ Dividimos a documentação desse trabalho na explicação das definições e das
 ### Definições
 
 Começamos nossas definições por três variáveis auxiliares na execução do lexer:
-- **str_const (char*)**: armazena a string sendo lida.
+- **str_const (char\*)**: armazena a string sendo lida.
 - **str_len (int)**: captura o comprimento de uma string sendo lida.
 - **str_contain_null_char (bool)**: captura a existência de um caractere nulo em uma string.
 
