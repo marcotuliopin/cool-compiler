@@ -53,8 +53,8 @@ Com exceção das palavras "true" e "false", que devem ser iniciadas com letra m
 
 #### Strings
 
-Quando o carctere referente às aspas é lido o estado <strings> é inicado. A partir daí, para cada caractere lido, esse caractere é adicionado à string e o tamanho dela é incrementado até que seja lido um caractere de aspas novamente, quando o estado é setado para <BEGIN> novamente.
-Alguns cuidados especiais foram tomados: conferir se caso tenha um caractere de nova linha, esse caractere deve ter um '\' antes dele, conferir se não há EOF no meio da string e conferir se não há caracteres nulos.
+Quando o caractere referente às aspas é lido, o estado *strings* é iniciado. A partir daí, para cada caractere lido, este é adicionado à string e o tamanho dela é incrementado até que seja lido um caractere de aspas novamente, quando o estado é definido para *INITIAL* (o estado inicial padrão) novamente.
+Alguns cuidados especiais foram tomados: conferir se caso tenha um caractere de nova linha, esse caractere deve ter um '\' antes dele, conferir se não há EOF no meio da string e conferir se não há caracteres nulos. Qualquer desses casos levará a um erro.
 
 #### Inteiros e Identificadores
 
