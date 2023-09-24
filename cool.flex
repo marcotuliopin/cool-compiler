@@ -224,22 +224,22 @@ f[aA][lL][sS][eE]	{
 
 <strings>\n		{
 	curr_lineno++;
-	strcpy(cool_yylval.error_msg, "Unterminated string constant");
-	BEGIN(INITIAL);
-	return (ERROR);
+	str_contain_new_line = true;
 }
 
 <strings>\"		{ 
+	BEGIN(INITIAL);
 	if (str_len > 1 && str_contain_null_char) {
-		strcpy(cool_yylval.error_msg, "String contains null character");
-		BEGIN(INITIAL); 
+		strcpy(cool_yylval.error_msg, "String constant cannot contain null character");
+		return (ERROR);
+	}
+	if (str_contain_new_line) {
+		strcpy(cool_yylval.error_msg, "Unterminated string constant");
 		return (ERROR);
 	}
 	cool_yylval.symbol = stringtable.add_string(str_const);
-	BEGIN(INITIAL); 
 	return (STR_CONST);
 }
-
 <strings>.		{ 
 	if (str_len >= MAX_STR_CONST) {
 		strcpy(cool_yylval.error_msg, "String constant too long");
