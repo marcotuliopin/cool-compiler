@@ -89,7 +89,17 @@ int omerrs = 0;               /* number of errors in lexing and parsing */
 %type <class_> class
 
 /* You will want to change the following line. */
-%type <features> dummy_feature_list
+/* The body of a class definition consists of a list of feature definitions. */
+%type <features> feat_list;
+/* A feature is either an attribute or a method */
+%type <feature> attr; 
+%type <feature> method; /* A method of a class is a procedure that may manipulate the variables and objects of the class. */
+%type <formal> formal;
+%type <formals> formal_list;
+%type <case_> case;
+%type <cases> case_list;
+%type <expression> expr;
+%type <expressions> expr_list;
 
 /* Precedence declarations go here. */
 
@@ -113,16 +123,39 @@ class_list
 	;
 
 /* If no parent is specified, the class inherits from the Object class. */
-class	: CLASS TYPEID '{' dummy_feature_list '}' ';'
+class	: CLASS TYPEID '{' feat_list '}' ';'
 		{ $$ = class_($2,idtable.add_string("Object"),$4,
 			      stringtable.add_string(curr_filename)); }
-	| CLASS TYPEID INHERITS TYPEID '{' dummy_feature_list '}' ';'
+	| CLASS TYPEID INHERITS TYPEID '{' feat_list '}' ';'
 		{ $$ = class_($2,$4,$6,stringtable.add_string(curr_filename)); }
 	;
 
 /* Feature list may be empty, but no empty features in list. */
-dummy_feature_list:		/* empty */
-                {  $$ = nil_Features(); }
+feat_list : /* empty */ 
+		{  $$ = nil_Features(); }
+	  | attr
+	  	{ $$ = single_Features($1);
+	  	  parse_results = $$; }
+	  | feat_list attr
+	  	{ $$ = append_Features($1, single_Features($2));
+	  	  parse_resuts = $$; }
+	  | method
+	  	{ $$ = single_Features($1); 
+	  	  parse_results = $$; }
+	  | feat_list method
+	  	{ $$ = append_Features($1, single_Features($2));
+	  	  parse_results = $$; }
+	  ;
+	  
+/* An attribute of class A specifies a variable that is part of the state of objects of a class. */
+attr :    OBJECTID ':' TYPEID init
+		{ $$ = attr($1, $3, init); }
+
+init :	  /* empty */
+		{ %% = no_expr(); }
+	| '[' ASSIGN expr ']'
+		{ $$ = $2; }
+
 
 
 /* end of grammar */
