@@ -148,13 +148,11 @@ feat_list : /* empty */
 	  ;
 	  
 /* An attribute of class A specifies a variable that is part of the state of objects of a class. */
-attr :    OBJECTID ':' TYPEID init
-		{ $$ = attr($1, $3, init); }
-
-init :	  /* empty */
-		{ %% = no_expr(); }
-	| '[' ASSIGN expr ']'
-		{ $$ = $2; }
+attr :    OBJECTID ':' TYPEID /* empty */
+		{ $$ = attr($1, $3, no_expr()); }
+	| OBJECTID ':' TYPEID '[' ASSIGN expr ']'
+		{ $$ = attr($1, $3, $6); }
+	;
 
 
 
