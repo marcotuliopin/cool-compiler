@@ -91,12 +91,13 @@ int omerrs = 0;               /* number of errors in lexing and parsing */
 /* You will want to change the following line. */
 /* The body of a class definition consists of a list of feature definitions. */
 %type <features> feat_list;
+%type <feature> feat;
 /* A feature is either an attribute or a method */
 %type <feature> attr; 
 %type <feature> method; /* A method of a class is a procedure that may manipulate the variables and objects of the class. */
 %type <formal> formal;
 %type <formals> formal_list;
-%type <case_> case;
+%type <case_> case_;
 %type <cases> case_list;
 %type <expression> expr;
 %type <expressions> expr_list;
@@ -133,26 +134,85 @@ class	: CLASS TYPEID '{' feat_list '}' ';'
 /* Feature list may be empty, but no empty features in list. */
 feat_list : /* empty */ 
 		{  $$ = nil_Features(); }
-	  | attr
-	  	{ $$ = single_Features($1);
-	  	  parse_results = $$; }
-	  | feat_list attr
-	  	{ $$ = append_Features($1, single_Features($2));
-	  	  parse_resuts = $$; }
-	  | method
-	  	{ $$ = single_Features($1); 
-	  	  parse_results = $$; }
-	  | feat_list method
-	  	{ $$ = append_Features($1, single_Features($2));
-	  	  parse_results = $$; }
+	  | feat
+	  	{ $$ = single_Features($1); }
+	  | feat_list feat
+	  	{ $$ = append_Features($1, $2); }
 	  ;
 	  
+feat : 	  attr
+		{ $$ = $1; }
+	| method
+		{ $$ = $1; }
+	;
+	  
 /* An attribute of class A specifies a variable that is part of the state of objects of a class. */
-attr :    OBJECTID ':' TYPEID /* empty */
+attr : 	  OBJECTID ':' TYPEID /* empty */
 		{ $$ = attr($1, $3, no_expr()); }
 	| OBJECTID ':' TYPEID '[' ASSIGN expr ']'
 		{ $$ = attr($1, $3, $6); }
 	;
+	
+/* A method definition has the form <id>(<id> : <type>,...,<id> : <type>): <type> { <expr> }; */
+method : OBJECTID '(' formal_list ')' ':' TYPEID '{' expr '}' ';'
+		{ $$ = method($1, $3, $6, $8); }
+	;
+	
+/* Formal parameters are used in method definitions. The field names are self explanatory. */
+formal_list : /* empty */
+			{ $$ = nil_Formals(); }
+		| formal
+			{ $$ = single_Formals($1); }
+		| formal_list ',' formal
+			{ $$ = append_Formals($1, $2); }
+		;
+
+formal : OBJECTID ':' TYPEID
+		{ $$ = formal($1, $3); }
+	;
+	
+/* Expressions are the largest syntactic category in Cool. */
+expr_list : /* empty */
+		{
+
+expr :
+	/* constant */
+	/* The constants belong to the basic classes Bool, Int, and String. 
+	The value of a constant is an object of the appropriate basic class. */
+	  INT_CONST 
+		{ $$ = int_const($1); }
+	| STR_CONST
+		{ $$ = string_const($1); }
+	| BOOL_CONST
+		{ $$ = bool_const($1); }
+	/* identifier */
+	| OBJECTID
+		{ $$ = $1; }
+	/* assign */	
+	| OBJECTID ASSIGN expr
+		{ $$ = assign($1, $3); }
+	/* dispatch */
+	/* <expr>.<id>(<expr>,...,<expr>) */
+	| expr '.' OBJECTID '(' expr_list ')'
+		{ $$ = dispatch($1, $3, $5); }
+	/* <id>(<expr>,...,<expr>) */
+	| OBJECTID '(' expr_list ')'
+		{ $$ = dispatch(object(idtable.add_string("self")), $1, $3); }
+	/* <expr>@<type>.id(<expr>,...,<expr>) */
+	| expr '@' TYPEID '.' OBJECTID '(' expr_list ')'
+		{ $$ = static_dispatch($1, $3, $5, $7); }
+	/* conditional */
+	/* if <expr> then <expr> else <expr> fi */
+	| IF expr THEN expr ELSE expr FI
+		{ $$ = conditional( $2, $4, $6); }
+	/* loop */
+	/* while <expr> loop <expr> pool */
+	| WHILE expr LOOP expr POOL 
+		{ $$ = loop($2, $4); }
+	|
+
+	
+
 
 
 
