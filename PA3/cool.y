@@ -146,10 +146,8 @@ feat : 	  attr
 	;
 	  
 /* An attribute of class A specifies a variable that is part of the state of objects of a class. */
-attr : 	  OBJECTID ':' TYPEID /* empty */
-		{ $$ = attr($1, $3, no_expr()); }
-	| OBJECTID ':' TYPEID '[' ASSIGN expr ']'
-		{ $$ = attr($1, $3, $6); }
+attr : 	  OBJECTID ':' TYPEID init ';'
+		{ $$ = attr($1, $3, $4); }
 	;
 	
 /* A method definition has the form <id>(<id> : <type>,...,<id> : <type>): <type> { <expr> }; */
@@ -221,12 +219,22 @@ expr :
 	|
 	
 
-let : 	  error IN expr 
-		/* TODO ERROR */
-	| 
+let :	  OBJECTID ':' TYPEID init IN expression
+		{ $$ = let($1, $3, no_expr(), $5); }
+	| OBJECTID ':' TYPEID init ',' let
+		{ $$ = let($1, $3, $4, $6); }
+	| error IN expression
+		/* TODO*/  
+	|  error IN expr
+		/* TODO*/
+	;
 
 /* Optional initialization of attributes. */
-
+init : 	  /* empty */
+		{ $$ = no_expr(); }
+	| ASSIGN expression
+		{ $$ = $2; }
+	;
 
 
 /* end of grammar */
