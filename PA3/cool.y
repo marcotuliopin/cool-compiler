@@ -101,7 +101,7 @@ int omerrs = 0;               /* number of errors in lexing and parsing */
 %type <cases> case_list;
 %type <expression> expr;
 %type <expressions> expr_list;
-%type <expressions> expr_list2;
+%type <expression> let;
 
 /* Precedence declarations go here. */
 
@@ -142,9 +142,7 @@ feat_list : /* empty */
 	  ;
 	  
 feat : 	  attr
-		{ $$ = $1; }
 	| method
-		{ $$ = $1; }
 	;
 	  
 /* An attribute of class A specifies a variable that is part of the state of objects of a class. */
@@ -175,7 +173,16 @@ formal : OBJECTID ':' TYPEID
 	
 /* Expressions are the largest syntactic category in Cool. */
 expr_list : /* empty */
-		{
+		{ $$ = nil_Expressions(); }
+	|  expr ';'
+		{ $$ = single_Expressions($1); }
+	| expr 
+		{$$ = single_Expressions($1); }
+	| expr_list ',' expr
+		{$$ = append_Expressions($1, $3); }
+	| expr_list expr ';'
+		{$$ = append_Expressions($1, $2); }
+	;
 
 expr :
 	/* constant */
@@ -189,38 +196,36 @@ expr :
 		{ $$ = bool_const($1); }
 	/* identifier */
 	| OBJECTID
-		{ $$ = $1; }
 	/* assign */	
 	| OBJECTID ASSIGN expr
 		{ $$ = assign($1, $3); }
 	/* dispatch */
-	/* <expr>.<id>(<expr>,...,<expr>) */
-	| expr '.' OBJECTID '(' expr_list ')'
+	| expr '.' OBJECTID '(' expr_list ')'  /* <expr>.<id>(<expr>,...,<expr>) */
 		{ $$ = dispatch($1, $3, $5); }
-	/* <id>(<expr>,...,<expr>) */
-	| OBJECTID '(' expr_list ')'
+	| OBJECTID '(' expr_list ')'  /* <id>(<expr>,...,<expr>) */
 		{ $$ = dispatch(object(idtable.add_string("self")), $1, $3); }
-	/* <expr>@<type>.id(<expr>,...,<expr>) */
-	| expr '@' TYPEID '.' OBJECTID '(' expr_list ')'
+	| expr '@' TYPEID '.' OBJECTID '(' expr_list ')'  /* <expr>@<type>.id(<expr>,...,<expr>) */
 		{ $$ = static_dispatch($1, $3, $5, $7); }
 	/* conditional */
-	/* if <expr> then <expr> else <expr> fi */
 	| IF expr THEN expr ELSE expr FI
 		{ $$ = conditional( $2, $4, $6); }
 	/* loop */
-	/* while <expr> loop <expr> pool */
 	| WHILE expr LOOP expr POOL 
 		{ $$ = loop($2, $4); }
-	| '{' expr_list2 '}' 
+	/* block */
+	| '{' expr_list '}' 
 		{ $$ = block($2); }
-		
-
+	/* let */
+	| LET let
+		{ $$ = $2; }
+	|
 	
 
-expr_list2 : expr ';' 
-		{ $$ = sigle_Expressions($1) }
-	     | expr_list2 expr ';' 
-	     	{	$$ = append_Expressions($1, single_Expressions($2)); }
+let : 	  error IN expr 
+		/* TODO ERROR */
+	| 
+
+/* Optional initialization of attributes. */
 
 
 
