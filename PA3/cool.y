@@ -101,6 +101,7 @@ int omerrs = 0;               /* number of errors in lexing and parsing */
 %type <cases> case_list;
 %type <expression> expr;
 %type <expressions> expr_list;
+%type <expressions> expr_list2;
 
 /* Precedence declarations go here. */
 
@@ -170,6 +171,7 @@ formal_list : /* empty */
 formal : OBJECTID ':' TYPEID
 		{ $$ = formal($1, $3); }
 	;
+
 	
 /* Expressions are the largest syntactic category in Cool. */
 expr_list : /* empty */
@@ -209,10 +211,16 @@ expr :
 	/* while <expr> loop <expr> pool */
 	| WHILE expr LOOP expr POOL 
 		{ $$ = loop($2, $4); }
-	|
+	| '{' expr_list2 '}' 
+		{ $$ = block($2); }
+		
 
 	
 
+expr_list2 : expr ';' 
+		{ $$ = sigle_Expressions($1) }
+	     | expr_list2 expr ';' 
+	     	{	$$ = append_Expressions($1, single_Expressions($2)); }
 
 
 
@@ -232,4 +240,3 @@ void yyerror(char *s)
 
   if(omerrs>50) {fprintf(stdout, "More than 50 errors\n"); exit(1);}
 }
-
