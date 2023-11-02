@@ -187,8 +187,7 @@ expr_list_1 : /* empty */
 		{ $$ = append_Expressions($1, $2); }
 	;
 
-expr :
-	| '(' expr ')'
+expr :	'(' expr ')'
 		{ $$ = $2; }
 	/* constant */
 	/* The constants belong to the basic classes Bool, Int, and String. 
@@ -263,12 +262,12 @@ expr :
 		
 
 let :	  OBJECTID ':' TYPEID init IN expr
-		{ $$ = let($1, $3, no_expr(), $5); }
+		{ $$ = let($1, $3, no_expr(), $6); }
 	| OBJECTID ':' TYPEID init ',' let
 		{ $$ = let($1, $3, $4, $6); }
 	| error IN expr
 		/* TODO*/  
-	|  error IN expr
+	|  error ',' let
 		/* TODO*/
 	;
 	
