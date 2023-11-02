@@ -227,7 +227,7 @@ expr :
 	| CASE expr OF case_list ESAC
 		{ $$ = typcase($2, $4); }
 	/* new */
-	| NEW OBJECTID
+	| NEW TYPEID
 		{ $$ = new_($2); }
 	/* isvoid */
 	| ISVOID expr
@@ -260,9 +260,6 @@ expr :
 	| NOT expr
 		{ $$ = comp($2); }
 		
- 
-	
-	
 
 let :	  OBJECTID ':' TYPEID init IN expression
 		{ $$ = let($1, $3, no_expr(), $5); }
