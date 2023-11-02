@@ -187,10 +187,12 @@ expr_list_1 : /* empty */
 	;
 
 expr :
+	| '(' expr ')'
+		{ $$ = $2; }
 	/* constant */
 	/* The constants belong to the basic classes Bool, Int, and String. 
 	The value of a constant is an object of the appropriate basic class. */
-	  INT_CONST 
+	| INT_CONST 
 		{ $$ = int_const($1); }
 	| STR_CONST
 		{ $$ = string_const($1); }
@@ -242,6 +244,21 @@ expr :
 	/* division */
 	| expr '/' expr
 		{ $$ = divide($1, $3); }
+	/* negation */
+	| '~' expr 
+		{ $$ = neg($2); }
+	/* less than */
+	| expr '<' expr
+		{ $$ = lt($1, $3); }
+	/* less equal */
+	| expr LE expr
+		{ $$ = leq($1, $3); }
+	/* equal */
+	| expr '=' expr 
+		{ $$ = eq($1, $3); }
+	/* complement */
+	| NOT expr
+		{ $$ = comp($2); }
 		
  
 	
