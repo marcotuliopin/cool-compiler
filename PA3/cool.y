@@ -97,11 +97,12 @@ int omerrs = 0;               /* number of errors in lexing and parsing */
 %type <feature> method; /* A method of a class is a procedure that may manipulate the variables and objects of the class. */
 %type <formal> formal;
 %type <formals> formal_list;
-%type <case_> case_;
 %type <cases> case_list;
 %type <expression> expr;
 %type <expressions> expr_list;
+%type <expressions> expr_list_1;
 %type <expression> let;
+%type <expression> init;
 
 /* Precedence declarations go here. */
 
