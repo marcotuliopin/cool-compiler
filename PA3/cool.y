@@ -262,7 +262,7 @@ expr :	'(' expr ')'
 		
 
 let :	  OBJECTID ':' TYPEID init IN expr
-		{ $$ = let($1, $3, no_expr(), $6); }
+		{ $$ = let($1, $3, $4, $6); }
 	| OBJECTID ':' TYPEID init ',' let
 		{ $$ = let($1, $3, $4, $6); }
 	| error IN expr
