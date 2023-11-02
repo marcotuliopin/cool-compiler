@@ -183,7 +183,7 @@ expr_list_1 : /* empty */
 		{ $$ = nil_Expressions(); }
 	| expr ';'
 		{ $$ = single_Expressions($1); }
-	| expr_list expr ';'
+	| expr_list_1 expr ';'
 		{ $$ = append_Expressions($1, single_Expressions($2)); }
 	;
 
