@@ -1,0 +1,68 @@
+7c7
+<     "../PA2/examples/graph.cl"
+---
+>     "../../PA2/examples/graph.cl"
+111c111
+<     "../PA2/examples/graph.cl"
+---
+>     "../../PA2/examples/graph.cl"
+236c236
+<     "../PA2/examples/graph.cl"
+---
+>     "../../PA2/examples/graph.cl"
+242c242
+<       #70
+---
+>       #77
+249c249
+<       #88
+---
+>       #77
+256c256
+<       #88
+---
+>       #77
+402c402
+<     "../PA2/examples/graph.cl"
+---
+>     "../../PA2/examples/graph.cl"
+408c408
+<       #92
+---
+>       #101
+571c571
+<     "../PA2/examples/graph.cl"
+---
+>     "../../PA2/examples/graph.cl"
+577c577
+<       #138
+---
+>       #144
+671c671
+<     "../PA2/examples/graph.cl"
+---
+>     "../../PA2/examples/graph.cl"
+677c677
+<       #174
+---
+>       #182
+779c779
+<     "../PA2/examples/graph.cl"
+---
+>     "../../PA2/examples/graph.cl"
+785c785
+<       #212
+---
+>       #216
+879c879
+<     "../PA2/examples/graph.cl"
+---
+>     "../../PA2/examples/graph.cl"
+1879c1879
+<     "../PA2/examples/graph.cl"
+---
+>     "../../PA2/examples/graph.cl"
+1927c1927
+<     "../PA2/examples/graph.cl"
+---
+>     "../../PA2/examples/graph.cl"

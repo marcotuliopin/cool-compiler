@@ -1,0 +1,20 @@
+7c7
+<     "../PA2/examples/io.cl"
+---
+>     "../../PA2/examples/io.cl"
+40c40
+<     "../PA2/examples/io.cl"
+---
+>     "../../PA2/examples/io.cl"
+65c65
+<     "../PA2/examples/io.cl"
+---
+>     "../../PA2/examples/io.cl"
+90c90
+<     "../PA2/examples/io.cl"
+---
+>     "../../PA2/examples/io.cl"
+115c115
+<     "../PA2/examples/io.cl"
+---
+>     "../../PA2/examples/io.cl"

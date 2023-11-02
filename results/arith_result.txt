@@ -1,0 +1,76 @@
+7c7
+<     "../PA2/examples/arith.cl"
+---
+>     "../../PA2/examples/arith.cl"
+357c357
+<     "../PA2/examples/arith.cl"
+---
+>     "../../PA2/examples/arith.cl"
+371c371
+<         #62
+---
+>         #63
+412c412
+<     "../PA2/examples/arith.cl"
+---
+>     "../../PA2/examples/arith.cl"
+426c426
+<         #62
+---
+>         #63
+470c470
+<         #94
+---
+>         #63
+518c518
+<     "../PA2/examples/arith.cl"
+---
+>     "../../PA2/examples/arith.cl"
+648c648
+<     "../PA2/examples/arith.cl"
+---
+>     "../../PA2/examples/arith.cl"
+703c703
+<     "../PA2/examples/arith.cl"
+---
+>     "../../PA2/examples/arith.cl"
+1611c1611
+<     "../PA2/examples/arith.cl"
+---
+>     "../../PA2/examples/arith.cl"
+1624c1624
+<       #253
+---
+>       #241
+1631c1631
+<       #253
+---
+>       #241
+2250c2250
+<         #321
+---
+>         #322
+2268c2268
+<         #321
+---
+>         #323
+2286c2286
+<         #321
+---
+>         #324
+2304c2304
+<         #321
+---
+>         #325
+2322c2322
+<         #321
+---
+>         #326
+2655c2655
+<                   #362
+---
+>                   #363
+2683c2683
+<                   #362
+---
+>                   #364

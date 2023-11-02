@@ -1,0 +1,4 @@
+7c7
+<     "../PA2/examples/hello_world.cl"
+---
+>     "../../PA2/examples/hello_world.cl"

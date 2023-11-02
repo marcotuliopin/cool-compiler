@@ -1,0 +1,80 @@
+7c7
+<     "../PA2/examples/lam.cl"
+---
+>     "../../PA2/examples/lam.cl"
+108c108
+<     "../PA2/examples/lam.cl"
+---
+>     "../../PA2/examples/lam.cl"
+121c121
+<       #30
+---
+>       #26
+233c233
+<     "../PA2/examples/lam.cl"
+---
+>     "../../PA2/examples/lam.cl"
+374c374
+<     "../PA2/examples/lam.cl"
+---
+>     "../../PA2/examples/lam.cl"
+387c387
+<       #56
+---
+>       #50
+394c394
+<       #56
+---
+>       #50
+401c401
+<       #56
+---
+>       #50
+508c508
+<     "../PA2/examples/lam.cl"
+---
+>     "../../PA2/examples/lam.cl"
+705c705
+<     "../PA2/examples/lam.cl"
+---
+>     "../../PA2/examples/lam.cl"
+868c868
+<     "../PA2/examples/lam.cl"
+---
+>     "../../PA2/examples/lam.cl"
+1142c1142
+<     "../PA2/examples/lam.cl"
+---
+>     "../../PA2/examples/lam.cl"
+1155c1155
+<       #202
+---
+>       #173
+1674c1674
+<     "../PA2/examples/lam.cl"
+---
+>     "../../PA2/examples/lam.cl"
+1680c1680
+<       #253
+---
+>       #254
+1687c1687
+<       #275
+---
+>       #254
+1826c1826
+<         #299
+---
+>         #300
+2126c2126
+<     "../PA2/examples/lam.cl"
+---
+>     "../../PA2/examples/lam.cl"
+2506c2506
+<     "../PA2/examples/lam.cl"
+---
+>     "../../PA2/examples/lam.cl"
+2554c2554
+<             #370
+---
+>             #371

@@ -1,0 +1,16 @@
+7c7
+<     "../PA2/examples/list.cl"
+---
+>     "../../PA2/examples/list.cl"
+90c90
+<     "../PA2/examples/list.cl"
+---
+>     "../../PA2/examples/list.cl"
+103c103
+<       #72
+---
+>       #49
+170c170
+<     "../PA2/examples/list.cl"
+---
+>     "../../PA2/examples/list.cl"

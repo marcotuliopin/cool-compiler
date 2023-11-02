@@ -1,0 +1,44 @@
+7c7
+<     "../PA2/examples/hairyscary.cl"
+---
+>     "../../PA2/examples/hairyscary.cl"
+27c27
+<         #5
+---
+>         #6
+35c35
+<         #5
+---
+>         #7
+137c137
+<     "../PA2/examples/hairyscary.cl"
+---
+>     "../../PA2/examples/hairyscary.cl"
+172c172
+<     "../PA2/examples/hairyscary.cl"
+---
+>     "../../PA2/examples/hairyscary.cl"
+192c192
+<         #27
+---
+>         #28
+273c273
+<     "../PA2/examples/hairyscary.cl"
+---
+>     "../../PA2/examples/hairyscary.cl"
+301c301
+<         #40
+---
+>         #41
+309c309
+<         #40
+---
+>         #42
+317c317
+<         #40
+---
+>         #43
+405c405
+<     "../PA2/examples/hairyscary.cl"
+---
+>     "../../PA2/examples/hairyscary.cl"

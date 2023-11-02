@@ -1,0 +1,28 @@
+7c7
+<     "../PA2/examples/life.cl"
+---
+>     "../../PA2/examples/life.cl"
+13c13
+<       #0
+---
+>       #30212
+20c20
+<       #47
+---
+>       #30212
+27c27
+<       #47
+---
+>       #30212
+360c360
+<     "../PA2/examples/life.cl"
+---
+>     "../../PA2/examples/life.cl"
+2675c2675
+<     "../PA2/examples/life.cl"
+---
+>     "../../PA2/examples/life.cl"
+2681c2681
+<       #247
+---
+>       #385

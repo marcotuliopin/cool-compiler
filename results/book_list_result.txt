@@ -1,0 +1,44 @@
+7c7
+<     "../PA2/examples/book_list.cl"
+---
+>     "../../PA2/examples/book_list.cl"
+13c13
+<       #0
+---
+>       #30212
+20c20
+<       #4
+---
+>       #30212
+142c142
+<     "../PA2/examples/book_list.cl"
+---
+>     "../../PA2/examples/book_list.cl"
+261c261
+<     "../PA2/examples/book_list.cl"
+---
+>     "../../PA2/examples/book_list.cl"
+380c380
+<     "../PA2/examples/book_list.cl"
+---
+>     "../../PA2/examples/book_list.cl"
+386c386
+<       #52
+---
+>       #70
+393c393
+<       #74
+---
+>       #70
+491c491
+<           #96
+---
+>           #97
+526c526
+<     "../PA2/examples/book_list.cl"
+---
+>     "../../PA2/examples/book_list.cl"
+549c549
+<     "../PA2/examples/book_list.cl"
+---
+>     "../../PA2/examples/book_list.cl"

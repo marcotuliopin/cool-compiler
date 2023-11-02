@@ -1,0 +1,12 @@
+7c7
+<     "../PA2/examples/new_complex.cl"
+---
+>     "../../PA2/examples/new_complex.cl"
+161c161
+<     "../PA2/examples/new_complex.cl"
+---
+>     "../../PA2/examples/new_complex.cl"
+174c174
+<       #21
+---
+>       #2
