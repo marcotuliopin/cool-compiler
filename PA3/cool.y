@@ -162,7 +162,7 @@ formal_list : /* empty */
 		| formal
 			{ $$ = single_Formals($1); }
 		| formal_list ',' formal
-			{ $$ = append_Formals($1, $2); }
+			{ $$ = append_Formals($1, $3); }
 		;
 
 formal : OBJECTID ':' TYPEID
