@@ -105,6 +105,16 @@ int omerrs = 0;               /* number of errors in lexing and parsing */
 %type <expression> init;
 
 /* Precedence declarations go here. */
+%right LET_PREC
+%right ASSIGN
+%right NOT
+%nonassoc '<' '=' LE
+%left '+' '-'
+%left '*' '/'
+%left ISVOID
+%left '~'
+%left '@'
+%left '.'
 
 
 %%
@@ -261,7 +271,7 @@ expr :	'(' expr ')'
 		{ $$ = comp($2); }
 		
 
-let :	  OBJECTID ':' TYPEID init IN expr
+let :	  OBJECTID ':' TYPEID init IN expr %prec LET_PREC
 		{ $$ = let($1, $3, $4, $6); }
 	| OBJECTID ':' TYPEID init ',' let
 		{ $$ = let($1, $3, $4, $6); }
