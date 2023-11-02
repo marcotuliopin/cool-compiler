@@ -261,11 +261,11 @@ expr :
 		{ $$ = comp($2); }
 		
 
-let :	  OBJECTID ':' TYPEID init IN expression
+let :	  OBJECTID ':' TYPEID init IN expr
 		{ $$ = let($1, $3, no_expr(), $5); }
 	| OBJECTID ':' TYPEID init ',' let
 		{ $$ = let($1, $3, $4, $6); }
-	| error IN expression
+	| error IN expr
 		/* TODO*/  
 	|  error IN expr
 		/* TODO*/
