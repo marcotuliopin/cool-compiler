@@ -172,14 +172,18 @@ formal : OBJECTID ':' TYPEID
 /* Expressions are the largest syntactic category in Cool. */
 expr_list : /* empty */
 		{ $$ = nil_Expressions(); }
-	|  expr ';'
-		{ $$ = single_Expressions($1); }
 	| expr 
 		{$$ = single_Expressions($1); }
 	| expr_list ',' expr
 		{$$ = append_Expressions($1, $3); }
+	;
+	
+expr_list_1 : /* empty */
+		{ $$ = nil_Expressions(); }
+	| expr ';'
+		{ $$ = single_Expressions($1); }
 	| expr_list expr ';'
-		{$$ = append_Expressions($1, $2); }
+		{ $$ = append_Expressions($1, $2); }
 	;
 
 expr :
@@ -194,6 +198,7 @@ expr :
 		{ $$ = bool_const($1); }
 	/* identifier */
 	| OBJECTID
+		{ $$ = object($1); }
 	/* assign */	
 	| OBJECTID ASSIGN expr
 		{ $$ = assign($1, $3); }
@@ -211,12 +216,35 @@ expr :
 	| WHILE expr LOOP expr POOL 
 		{ $$ = loop($2, $4); }
 	/* block */
-	| '{' expr_list '}' 
+	| '{' expr_list_1 '}' 
 		{ $$ = block($2); }
 	/* let */
 	| LET let
 		{ $$ = $2; }
-	|
+	/* case */
+	| CASE expr OF case_list ESAC
+		{ $$ = typcase($2, $4); }
+	/* new */
+	| NEW OBJECTID
+		{ $$ = new_($2); }
+	/* isvoid */
+	| ISVOID expr
+		{ $$  = isvoid($2); }
+	/* plus */
+	| expr '+' expr
+		{ $$ = plus($1, $3); }
+	/* minus */
+	| expr '-' expr
+		{ $$ = sub($1, $3); }
+	/* multiplication */
+	| expr '*' expr
+		{ $$ = mul($1, $3); }
+	/* division */
+	| expr '/' expr
+		{ $$ = divide($1, $3); }
+		
+ 
+	
 	
 
 let :	  OBJECTID ':' TYPEID init IN expression
@@ -227,6 +255,14 @@ let :	  OBJECTID ':' TYPEID init IN expression
 		/* TODO*/  
 	|  error IN expr
 		/* TODO*/
+	;
+	
+case_list : /* empty */
+		{ $$ = nil_Cases(); }
+	| OBJECTID ':' TYPEID DARROW expr ';'
+		{ $$ = single_Cases(branch($1, $3, $5); }
+	| case_list OBJECTID ':' TYPEID DARROW expr ';'	
+		{ $$ = append_Cases($1, branch($2, $4, $6)); }
 	;
 
 /* Optional initialization of attributes. */
