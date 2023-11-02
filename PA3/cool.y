@@ -213,7 +213,7 @@ expr :	'(' expr ')'
 		{ $$ = static_dispatch($1, $3, $5, $7); }
 	/* conditional */
 	| IF expr THEN expr ELSE expr FI
-		{ $$ = conditional( $2, $4, $6); }
+		{ $$ = cond( $2, $4, $6); }
 	/* loop */
 	| WHILE expr LOOP expr POOL 
 		{ $$ = loop($2, $4); }
@@ -274,7 +274,7 @@ let :	  OBJECTID ':' TYPEID init IN expr
 case_list : /* empty */
 		{ $$ = nil_Cases(); }
 	| OBJECTID ':' TYPEID DARROW expr ';'
-		{ $$ = single_Cases(branch($1, $3, $5); }
+		{ $$ = single_Cases(branch($1, $3, $5)); }
 	| case_list OBJECTID ':' TYPEID DARROW expr ';'	
 		{ $$ = append_Cases($1, single_Cases(branch($2, $4, $6))); }
 	;
