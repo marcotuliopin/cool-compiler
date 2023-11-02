@@ -282,7 +282,7 @@ case_list : /* empty */
 /* Optional initialization of attributes. */
 init : 	  /* empty */
 		{ $$ = no_expr(); }
-	| ASSIGN expression
+	| ASSIGN expr
 		{ $$ = $2; }
 	;
 
