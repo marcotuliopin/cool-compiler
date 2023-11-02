@@ -139,7 +139,7 @@ feat_list : /* empty */
 	  | feat
 	  	{ $$ = single_Features($1); }
 	  | feat_list feat
-	  	{ $$ = append_Features($1, $2); }
+	  	{ $$ = append_Features($1, single_Features($2)); }
 	  ;
 	  
 feat : 	  attr
@@ -162,7 +162,7 @@ formal_list : /* empty */
 		| formal
 			{ $$ = single_Formals($1); }
 		| formal_list ',' formal
-			{ $$ = append_Formals($1, $3); }
+			{ $$ = append_Formals($1, single_Formals($3)); }
 		;
 
 formal : OBJECTID ':' TYPEID
@@ -176,7 +176,7 @@ expr_list : /* empty */
 	| expr 
 		{$$ = single_Expressions($1); }
 	| expr_list ',' expr
-		{$$ = append_Expressions($1, $3); }
+		{$$ = append_Expressions($1, single_Expressions($3)); }
 	;
 	
 expr_list_1 : /* empty */
@@ -184,7 +184,7 @@ expr_list_1 : /* empty */
 	| expr ';'
 		{ $$ = single_Expressions($1); }
 	| expr_list expr ';'
-		{ $$ = append_Expressions($1, $2); }
+		{ $$ = append_Expressions($1, single_Expressions($2)); }
 	;
 
 expr :	'(' expr ')'
@@ -276,7 +276,7 @@ case_list : /* empty */
 	| OBJECTID ':' TYPEID DARROW expr ';'
 		{ $$ = single_Cases(branch($1, $3, $5); }
 	| case_list OBJECTID ':' TYPEID DARROW expr ';'	
-		{ $$ = append_Cases($1, branch($2, $4, $6)); }
+		{ $$ = append_Cases($1, single_Cases(branch($2, $4, $6))); }
 	;
 
 /* Optional initialization of attributes. */
