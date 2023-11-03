@@ -73,7 +73,6 @@ Note que todo erro identificado pelo interpretador léxico gera à criação de 
 Dividimos a documentação dessa seção na explicação das definições dos terminais e das regras implementadas para o Analisdor sintático.
 
 --------------------------
-
 ### Terminais
 
 Começamos nossas com a declaração dos terminais e dos seus tipos:
@@ -94,7 +93,6 @@ Começamos nossas com a declaração dos terminais e dos seus tipos:
    variável.
 
 --------------------------
-
 ### Regras
  As regras foram baseadas na documentação da linguagem COOL, bem como nos métodos definidos no arquivo *cool-tree.cc*.
 
@@ -115,7 +113,10 @@ Um método é da forma \<id>(\<id> : \<type>,...,\<id> : \<type>): \<type> { \<e
 Um parâmetro formal é da forma: \<id> : \<tipo>.
 
 #### formal_list
-Para cada parêmetro formal lido após um *,*, adiciona ele à lista. Nesse caso, uma lista sem parâmetros é uma lista de parâmetros.
+Para cada parâmetro formal lido após um *,*, adiciona ele à lista. Nesse caso, uma lista sem parâmetros é uma lista de parâmetros.
+
+#### case_list
+Para cada linha da forma: \<id> : \<tipo> => \<expr>;, adiciona um *case* à lista. Nesse caso, uma lista sem parâmetros é uma lista de *case*s.
 
 ####  expr
 As expressões são a maior categoria sintática do COOL, então há muitas regras relacionadas a elas. De maneira geral, para cada método no arquivo *cool-tree.cc* que retorna um objeto da classe Expression, criou-se uma regra apropriada relacionada a esse método. Por exemplo, para as contantes, criaram-se 3 regras que usaram os métodos: int_const, string_const e bool_const.
@@ -131,7 +132,8 @@ Para cada expressão lida após um *;*, adiciona ela à lista. Nesse caso, uma l
 #### let
 
 Na declarações de precedência e de associatividade, foi criado um token *LET_REC*. Esse token foi usado na regra para definir precedência e solucionar o conflito de shift-reduce, introduzido pela ambiguidade da gramática. Além disso, um tratamento de erro é aplicado para que caso ocorra um erro de um let em uma variável, o parser siga para a próxima variável.
-case_list
+case_list.
 
+#### init
 
-
+Essa regra define uma inicialização opcional da variável.
