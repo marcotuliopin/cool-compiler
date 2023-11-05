@@ -4,7 +4,7 @@ A Compiler for the Cool programming language.
 
 ## Seção 1: Interpretador Léxico
 
-Marco Túlio de Pinho e Raul Araju
+**Marco Túlio de Pinho e Raul Araju**
 
 Dividimos a documentação desse trabalho na explicação das definições e das regras implementadas para o Interpretador Léxico.
 
@@ -69,6 +69,8 @@ Note que todo erro identificado pelo interpretador léxico gera à criação de 
 --------------------------
 
 ## Seção 2 : Analisador Sintático
+
+**Marco Túlio de Pinho e Raul Araju**
 
 Dividimos a documentação dessa seção na explicação das definições dos terminais e das regras implementadas para o Analisdor sintático.
 
