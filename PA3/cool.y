@@ -170,7 +170,7 @@ formal : OBJECTID ':' TYPEID
 	;
 
 	
-/* Expressions are the largest syntactic category in Cool. */
+	/* Expressions are the largest syntactic category in Cool. */
 expr_list : /* empty */
 		{ $$ = nil_Expressions(); }
 	| expr 
