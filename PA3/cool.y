@@ -97,6 +97,7 @@ int omerrs = 0;               /* number of errors in lexing and parsing */
 %type <feature> method; /* A method of a class is a procedure that may manipulate the variables and objects of the class. */
 %type <formal> formal;
 %type <formals> formal_list;
+%type <case_> case;
 %type <cases> case_list;
 %type <expression> expr;
 %type <expressions> expr_list;
@@ -105,6 +106,16 @@ int omerrs = 0;               /* number of errors in lexing and parsing */
 %type <expression> init;
 
 /* Precedence declarations go here. */
+%right LET_PREC
+%right ASSIGN
+%right NOT
+%nonassoc '<' '=' LE
+%left '+' '-'
+%left '*' '/'
+%left ISVOID
+%left '~'
+%left '@'
+%left '.'
 
 
 %%
@@ -131,6 +142,8 @@ class	: CLASS TYPEID '{' feat_list '}' ';'
 			      stringtable.add_string(curr_filename)); }
 	| CLASS TYPEID INHERITS TYPEID '{' feat_list '}' ';'
 		{ $$ = class_($2,$4,$6,stringtable.add_string(curr_filename)); }
+	| error ';'
+		{ yyerrok; }
 	;
 
 /* Feature list may be empty, but no empty features in list. */
@@ -144,6 +157,8 @@ feat_list : /* empty */
 	  
 feat : 	  attr
 	| method
+	| error ';'
+		{}
 	;
 	  
 /* An attribute of class A specifies a variable that is part of the state of objects of a class. */
@@ -179,12 +194,13 @@ expr_list : /* empty */
 		{$$ = append_Expressions($1, single_Expressions($3)); }
 	;
 	
-expr_list_1 : /* empty */
-		{ $$ = nil_Expressions(); }
-	| expr ';'
+expr_list_1 : expr ';'
 		{ $$ = single_Expressions($1); }
 	| expr_list_1 expr ';'
 		{ $$ = append_Expressions($1, single_Expressions($2)); }
+	/* deal with error inside block */
+	| error ';'
+		{ yyerrok; }
 	;
 
 expr :	'(' expr ')'
@@ -261,22 +277,24 @@ expr :	'(' expr ')'
 		{ $$ = comp($2); }
 		
 
-let :	  OBJECTID ':' TYPEID init IN expr
-		{ $$ = let($1, $3, no_expr(), $6); }
+let :	  OBJECTID ':' TYPEID init IN expr %prec LET_PREC
+		{ $$ = let($1, $3, $4, $6); }
 	| OBJECTID ':' TYPEID init ',' let
 		{ $$ = let($1, $3, $4, $6); }
-	| error IN expr
-		/* TODO*/  
+	| error IN expr %prec LET_PREC
+		{ yyerrok; }
 	|  error ',' let
-		/* TODO*/
+		{ yyerrok; }
 	;
 	
-case_list : /* empty */
-		{ $$ = nil_Cases(); }
-	| OBJECTID ':' TYPEID DARROW expr ';'
-		{ $$ = single_Cases(branch($1, $3, $5)); }
-	| case_list OBJECTID ':' TYPEID DARROW expr ';'	
-		{ $$ = append_Cases($1, single_Cases(branch($2, $4, $6))); }
+case_list : case
+		{ $$ = single_Cases($1); }
+	| case_list case
+		{ $$ = append_Cases($1, single_Cases($2)); }
+	;
+	
+case : OBJECTID ':' TYPEID DARROW expr ';'
+		{ $$ = branch($1, $3, $5); }
 	;
 
 /* Optional initialization of attributes. */

@@ -4,7 +4,7 @@ A Compiler for the Cool programming language.
 
 ## Seção 1: Interpretador Léxico
 
-Marco Túlio de Pinho e Raul Araju
+**Marco Túlio de Pinho e Raul Araju**
 
 Dividimos a documentação desse trabalho na explicação das definições e das regras implementadas para o Interpretador Léxico.
 
@@ -66,3 +66,83 @@ Qualquer leitura que não cause match com uma das regras especificadas levará a
 
 Note que todo erro identificado pelo interpretador léxico gera à criação de um token da classe *ERROR* e à impressão de uma mensagem de erro.
 
+--------------------------
+
+## Seção 2 : Analisador Sintático
+
+**Marco Túlio de Pinho e Raul Araju**
+
+Dividimos a documentação dessa seção na explicação das definições dos terminais e das regras implementadas para o Analisdor sintático.
+
+--------------------------
+### Terminais
+
+Começamos nossas com a declaração dos terminais e dos seus tipos:
+- **%type \<feature> feat** : define a feature de uma classe.
+- **%type \<features> feat_list** : define uma lista de features de uma classe.
+- **%type \<feature> attr** : o atributo de uma classe é uma feature dela.
+- **%type \<feature> method** : o método de uma classe é uma feature dela.
+ - **%type \<formal> formal**: define o parâmetro formal.
+ - **%type \<formals> formal_list**: define uma lista de parâmetros formais.
+ - **%type \<cases> case_list**: define uma lista de casos de uma estrutura *case*.    
+ -  **%type \<expression> expr**: define uma      
+   expressão.    
+  - **%type \<expressions> expr_list**: define uma lista de
+   expressões separadas por ' , '.   
+   - **%type \<expressions> expr_list_1**: define uma lista de expressões separadas por ' ; '.   
+ -  **%type \<expression> let**: define uma estrutura *let*.    
+ - **%type \<expression> init**: define a estrutura de uma inicialização de uma 
+   variável.
+
+--------------------------
+### Regras
+ As regras foram baseadas na documentação da linguagem COOL, bem como nos métodos definidos no arquivo *cool-tree.cc*.
+
+#### feat
+Uma feature pode ser um atributo ou um método.
+
+#### feat_list
+Adiciona cada feature à lista até que não haja mais features a serem adicionadas. Uma lista sem features é uma lista de features.
+
+#### attr
+Um atributo é da forma : \<id1> :\<tipo> [ <- \<expr> ]
+
+#### method
+Um método é da forma \<id>(\<id> : \<type>,...,\<id> : \<type>): \<type> { \<expr> };
+
+#### formal
+
+Um parâmetro formal é da forma: \<id> : \<tipo>.
+
+#### formal_list
+Para cada parâmetro formal lido após um *,*, adiciona ele à lista. Nesse caso, uma lista sem parâmetros é uma lista de parâmetros.
+
+#### case
+Uma linha do tipo \<id> : \<tipo> => \<expr>;. Adicionamos uma *branch* nesse caso.
+
+#### case_list
+Para cada linha da forma: \<id> : \<tipo> => \<expr>;, adiciona um *case* à lista. Nesse caso, uma lista sem parâmetros é uma lista de *case*s.
+
+####  expr
+As expressões são a maior categoria sintática do COOL, então há muitas regras relacionadas a elas. De maneira geral, para cada método no arquivo *cool-tree.cc* que retorna um objeto da classe Expression, criou-se uma regra apropriada relacionada a esse método. Por exemplo, para as contantes, criaram-se 3 regras que usaram os métodos: int_const, string_const e bool_const.
+
+#### expr_list
+
+Para cada expressão lida após um *,*, adiciona ela à lista. Nesse caso, uma lista sem expressões é uma lista de expressões.
+
+#### expr_list1
+
+Para cada expressão lida após um *;*, adiciona ela à lista. Nesse caso, uma lista deve ter pelo menos uma  lista de expressões.
+
+#### let
+
+Na declarações de precedência e de associatividade, foi criado um token *LET_REC*. Esse token foi usado na regra para definir precedência e solucionar o conflito de shift-reduce, introduzido pela ambiguidade da gramática. Além disso, um tratamento de erro é aplicado para que caso ocorra um erro de um let em uma variável, o parser siga para a próxima variável.
+case_list.
+
+#### init
+
+Essa regra define uma inicialização opcional da variável.
+
+### Erros
+
+Adicionamos uma regra de reconhecimento de erros em *features*, de forma que, caso haja um erro em uma *feature*, o parser segue para a próxima *feature*. Além disso, tratamos de erros em *blocks* (definidos conforme *expr_list1*, invocando a macro *yyerrok*. O mesmo tratamento é realizado para expressões apresentando erro na definição de um *let*. Por fim, uma classe que apresenta erro também é tratada conforme a macro *yyerrok*.
