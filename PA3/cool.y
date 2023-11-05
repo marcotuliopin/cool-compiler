@@ -158,7 +158,7 @@ feat_list : /* empty */
 feat : 	  attr
 	| method
 	| error ';'
-		{ yyerrok; }
+		{}
 	;
 	  
 /* An attribute of class A specifies a variable that is part of the state of objects of a class. */
@@ -185,7 +185,7 @@ formal : OBJECTID ':' TYPEID
 	;
 
 	
-/* Expressions are the largest syntactic category in Cool. */
+	/* Expressions are the largest syntactic category in Cool. */
 expr_list : /* empty */
 		{ $$ = nil_Expressions(); }
 	| expr 
