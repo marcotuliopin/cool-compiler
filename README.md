@@ -168,7 +168,21 @@ Herança: A classe B herda da classe A, ilustrando a herança de classes no COOL
 
 Instanciação de Objetos (New): O método method1 usa a expressão new B para criar um novo objeto, destacando a instanciação de objetos.
 
-## Bad.cl
+### Bad.cl
+
+Nome do Método Ausente: Na classe Principal, o método principal está sem um nome após o parêntese de abertura. Esse erro representa um erro comum ao definir um método.
+
+Dois Pontos Ausentes Após o Nome do Método: No método "add" dentro da classe Principal, não há dois pontos (:) após o nome do método. Isso representa uma violação da sintaxe de declaração de método.
+
+Falta de <- para Atribuição de Atributo: No atributo "a" da classe Principal, o operador <- para atribuição de atributo foi substituído por um sinal de igual (=). Isso demonstra a maneira incorreta de inicializar atributos.
+
+Parênteses não Correspondentes: No método "if_example" da classe Principal, há um parêntese de abertura não correspondente na instrução "if", que não está sendo fechado corretamente. Esse erro representa um erro comum de sintaxe em instruções condicionais.
+
+Chaves não Correspondentes: No método "while_example" da classe Principal, a chave de abertura do loop "while" não está sendo fechada com a palavra-chave "pool" corretamente. Isso demonstra a importância do emparelhamento adequado de chaves em estruturas de controle.
+
+Uso de Tipo Desconhecido: No método "let_example" da classe Principal, um tipo desconhecido, "UnknownType," é usado em uma declaração de variável. Isso destaca o problema de usar tipos indefinidos em COOL.
+
+Definição de Classe Incompleta: O código inclui a classe "IncompleteClass," que não possui uma chave de fechamento para encerrar adequadamente a definição da classe. Isso representa um erro comum ao definir classes.
 
 
 
