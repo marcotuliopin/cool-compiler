@@ -158,7 +158,7 @@ feat_list : /* empty */
 feat : 	  attr
 	| method
 	| error ';'
-		{ yyerrok; }
+		{}
 	;
 	  
 /* An attribute of class A specifies a variable that is part of the state of objects of a class. */
