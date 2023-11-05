@@ -146,3 +146,30 @@ Essa regra define uma inicialização opcional da variável.
 ### Erros
 
 Adicionamos uma regra de reconhecimento de erros em *features*, de forma que, caso haja um erro em uma *feature*, o parser segue para a próxima *feature*. Além disso, tratamos de erros em *blocks* (definidos conforme *expr_list1*, invocando a macro *yyerrok*. O mesmo tratamento é realizado para expressões apresentando erro na definição de um *let*. Por fim, uma classe que apresenta erro também é tratada conforme a macro *yyerrok*.
+
+## Good.cl
+Definições de Classe: O código define uma classe chamada  C. Isso demonstra o conceito de definições de classe.
+
+Atributos: Ele inclui um atributo var: Int dentro da classe C, mostrando declarações de atributos.
+
+Métodos: A classe C define alguns métodos, incluindo method0, method1, method2 etc. Esses métodos ilustram definições de métodos.
+
+Parâmetros de Método: Os métodos method0 e method1, por exemplo, recebem parâmetros (num1, num2, num), destacando os parâmetros de método em COOL.
+
+Variáveis Locais: Os métodos declaram variáveis locais usando a expressão let, como let y: Int <- 1, o que demonstra declarações de variáveis.
+
+Operações Aritméticas: O método add realiza uma operação aritmética, x * y, para mostrar expressões matemáticas em COOL.
+
+Declarações Condicionais: O método method2 declarações condicionais (if...then...else...fi) para demonstrar construções de fluxo de controle.
+
+Expressão Case: O método method3 usa uma expressão case para verificar o tipo dinâmico de um objeto, cobrindo a expressão case do COOL.
+
+Herança: A classe B herda da classe A, ilustrando a herança de classes no COOL.
+
+Instanciação de Objetos (New): O método method1 usa a expressão new B para criar um novo objeto, destacando a instanciação de objetos.
+
+## Bad.cl
+
+
+
+
