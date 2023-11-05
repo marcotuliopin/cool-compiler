@@ -1,71 +1,52 @@
-
-(*
- *  execute "coolc bad.cl" to see the error messages that the coolc parser
- *  generates
- *
- *  execute "myparser bad.cl" to see the error messages that your parser
- *  generates
- *)
 class Main inherits IO {
-    a: Int <- 42;
-    
+    -- Missing method name
     main(): Object {
-        let b: Int <- 17;
-        let result: Int
-        result <- self.add(a, b)
-        out_string("Result is: ")
-        out_int(result)
+        out_string("Hello, COOL!")
     }
-    
-    add(x: Int, y: Int): Int {
+
+    -- Missing colon after method name
+    add(x Int, y Int) Int {
         x + y
     }
-    
-    if_example(cond: Bool): Bool {
-        if cond then
+
+    -- Missing <- for attribute assignment
+    a: Int = 42;
+
+    -- Unmatched parantheses
+    if_example(cond Bool): Bool {
+        if (cond then
             true
         else
             false
         fi
     }
-    
+
+    -- Unmatched braces
     while_example(x: Int): Int {
         while x > 0 loop
             x <- x - 1
         pool
     }
-    
-    case_example(obj: Object): String {
-        case obj of
-            String => "It's a string"
-            Int => "It's an integer"
-            Bool => "It's a boolean"
-            Object => "It's an object"
-        esac
-    }
-    
+
+    -- Unknown type
     let_example(cond: Bool): Int {
-        let x: Int in
+        let x: UnknownType <- 10 in
             if cond then
-                x <- 10
-            else
                 x <- 20
-            fi
+            else
+                x <- 30
+            fi;
         x
     }
 };
 
-class ClassWithParseError inherits Object {
-    // Class contents here, but intentionally omit the terminating ;
-    methodWithError(): String {
-        "This is a method in the first class."
+class IncompleteClass inherits IO {
+    -- Attributes
+    a: Int <- 42;
+
+    -- Method
+    main(): Object {
+        out_string("Hello, COOL!")
     }
-    // No ; here, which will cause a parsing error
 
-class SecondClass inherits Object {
-    secondMethod(): String {
-        "This is a method in the second class."
-    };
-};
-
-
+    -- This class is not properly terminated, no '}' at the end
