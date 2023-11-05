@@ -2,12 +2,12 @@ class Main inherits IO {
     -- Missing method name
     main(): Object {
         out_string("Hello, COOL!")
-    }
+    };
 
     -- Missing colon after method name
     add(x Int, y Int) Int {
         x + y
-    }
+    }:
 
     -- Missing <- for attribute assignment
     a: Int = 42;
@@ -19,14 +19,14 @@ class Main inherits IO {
         else
             false
         fi
-    }
+    };
 
     -- Unmatched braces
     while_example(x: Int): Int {
         while x > 0 loop
             x <- x - 1
         pool
-    }
+    };
 
     -- Unknown type
     let_example(cond: Bool): Int {
@@ -37,7 +37,7 @@ class Main inherits IO {
                 x <- 30
             fi;
         x
-    }
+    };
 };
 
 class IncompleteClass inherits IO {
