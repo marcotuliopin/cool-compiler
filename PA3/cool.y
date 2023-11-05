@@ -287,9 +287,7 @@ let :	  OBJECTID ':' TYPEID init IN expr %prec LET_PREC
 		{ yyerrok; }
 	;
 	
-case_list : /* empty */
-		{ $$ = nil_Cases(); }
-	| case
+case_list : case
 		{ $$ = single_Cases($1); }
 	| case_list case
 		{ $$ = append_Cases($1, single_Cases($2)); }
