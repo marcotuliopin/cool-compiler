@@ -115,6 +115,9 @@ Um parâmetro formal é da forma: \<id> : \<tipo>.
 #### formal_list
 Para cada parâmetro formal lido após um *,*, adiciona ele à lista. Nesse caso, uma lista sem parâmetros é uma lista de parâmetros.
 
+#### case
+Uma linha do tipo \<id> : \<tipo> => \<expr>;. Adicionamos uma *branch* nesse caso.
+
 #### case_list
 Para cada linha da forma: \<id> : \<tipo> => \<expr>;, adiciona um *case* à lista. Nesse caso, uma lista sem parâmetros é uma lista de *case*s.
 
@@ -137,3 +140,7 @@ case_list.
 #### init
 
 Essa regra define uma inicialização opcional da variável.
+
+### Erros
+
+Adicionamos uma regra de reconhecimento de erros em *features*, de forma que, caso haja um erro em uma *feature*, o parser segue para a próxima *feature*. Além disso, tratamos de erros em *blocks* (definidos conforme *expr_list1*, invocando a macro *yyerrok*. O mesmo tratamento é realizado para expressões apresentando erro na definição de um *let*. Por fim, uma classe que apresenta erro também é tratada conforme a macro *yyerrok*.
