@@ -21,6 +21,8 @@
 // fill in the rest.
 //
 //**************************************************************
+#include <vector>
+#include <map>
 
 #include "cgen.h"
 #include "cgen_gc.h"
@@ -399,14 +401,15 @@ void StringEntry::code_def(ostream& s, int stringclasstag)
   // Add -1 eye catcher
   s << WORD << "-1" << endl;
 
-  code_ref(s);  s  << LABEL                                             // label
+  code_ref(s);  
+  s   << LABEL                                                          // label
       << WORD << stringclasstag << endl                                 // tag
       << WORD << (DEFAULT_OBJFIELDS + STRING_SLOTS + (len+4)/4) << endl // size
       << WORD;
 
 
  /***** Add dispatch information for class String ******/
-
+      s << Str << DISPTAB_SUFFIX;
       s << endl;                                              // dispatch table
       s << WORD;  lensym->code_ref(s);  s << endl;            // string length
   emit_string_constant(s,str);                                // ascii string
@@ -448,7 +451,7 @@ void IntEntry::code_def(ostream &s, int intclasstag)
       << WORD; 
 
  /***** Add dispatch information for class Int ******/
-
+      s << Int << DISPTAB_SUFFIX;
       s << endl;                                          // dispatch table
       s << WORD << str << endl;                           // integer value
 }
@@ -492,7 +495,7 @@ void BoolConst::code_def(ostream& s, int boolclasstag)
       << WORD;
 
  /***** Add dispatch information for class Bool ******/
-
+      s << Bool << DISPTAB_SUFFIX;
       s << endl;                                            // dispatch table
       s << WORD << val << endl;                             // value (0 or 1)
 }
@@ -625,6 +628,8 @@ CgenClassTable::CgenClassTable(Classes classes, ostream& s) : nds(NULL) , str(s)
    stringclasstag = 0 /* Change to your String class tag here */;
    intclasstag =    0 /* Change to your Int class tag here */;
    boolclasstag =   0 /* Change to your Bool class tag here */;
+   ioclasstag = 0;
+   objectclasstag = 0;
 
    enterscope();
    if (cgen_debug) cout << "Building CgenClassTable" << endl;
