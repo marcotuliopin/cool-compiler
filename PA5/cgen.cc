@@ -995,6 +995,21 @@ void get_methods(CgenNodeP nd, std::vector<std::pair<Class_, method_class *>> &m
   }
 }
 
+bool CgenClassTable::is_basic(Symbol name)
+{
+  switch (name)
+  {
+  case Str:
+  case Bool:
+  case Int:
+  case IO:
+  case Object:
+    return true;
+  default:
+    return false;
+  }
+}
+
 void CgenClassTable::emit_nametab()
 {
   str << CLASSNAMETAB << LABEL;
@@ -1009,7 +1024,7 @@ void CgenClassTable::emit_nametab()
 
     str << WORD;
     stringtable.lookup_string(currnd->get_name()->get_string())->code_ref(str);
-    str << endl;
+    str << "\n";
 
     childnd = currnd->get_children();
     while (childnd)
@@ -1029,12 +1044,12 @@ void CgenClassTable::emit_parenttab()
     q.pop();
     if (currnd->get_name() == Object)
     {
-      str << WORD << INVALID_CLASSTAG << endl;
+      str << WORD << INVALID_CLASSTAG << "\n";
     }
     else
     {
       int tag = classtags.find(currnd->get_parent()).second;
-      str << WORD << tag << endl;
+      str << WORD << tag << "\n";
     }
 
     childnd = currnd->get_children();
@@ -1095,8 +1110,8 @@ void CgenClassTable::emit_objtab()
     CgenNodeP currnd = q.front();
     q.pop();
 
-    str << WORD << currnd->get_name() << PROTOBJ_SUFFIX << endl;
-    str << WORD << currnd->get_name() << CLASSINIT_SUFFIX << endl;
+    str << WORD << currnd->get_name() << PROTOBJ_SUFFIX << "\n";
+    str << WORD << currnd->get_name() << CLASSINIT_SUFFIX << "\n";
 
     childnd = currnd->get_children();
     while (childnd)
@@ -1120,7 +1135,7 @@ void CgenClassTable::emit_dispatchtables()
 
     for (auto it_m = currnd->all_methods.begin(); it_m != currnd->all_methods.end(); it_m++)
     {
-      str << WORD << it_m->first->get_name() << "." << it_m->second->get_name() << endl;
+      str << WORD << it_m->first->get_name() << "." << it_m->second->get_name() << "\n";
     }
 
     childnd = currnd->get_children();
@@ -1142,11 +1157,11 @@ void CgenClassTable::emit_prototypes()
 
     get_attrs(currnd, currnd->all_attrs);
 
-    str << WORD << "-1" << endl;
+    str << WORD << "-1" << "\n";
     str << currnd->get_name() << PROTOBJ_SUFFIX << LABEL;
-    str << WORD << i << endl;                                         
-    str << WORD << DEFAULT_OBJFIELDS + currnd->all_attrs.size() << endl;
-    str << WORD << currnd->get_name() << DISPTAB_SUFFIX << endl;
+    str << WORD << i << "\n";                                         
+    str << WORD << DEFAULT_OBJFIELDS + currnd->all_attrs.size() << "\n";
+    str << WORD << currnd->get_name() << DISPTAB_SUFFIX << "\n";
 
     for (auto attr : currnd->all_attrs)
     {
@@ -1160,7 +1175,7 @@ void CgenClassTable::emit_prototypes()
         stringtable.lookup_string("")->code_ref(str);
       else
         str << "0";
-      str << endl;
+      str << "\n";
     }
 
     childnd = currnd->get_children();
@@ -1192,7 +1207,7 @@ void CgenClassTable::emit_initializers()
     emit_move(SELF, ACC, str);
 
     if (currnd->get_name() != Object)
-      str << "\tjal " << currnd->get_parent() << CLASSINIT_SUFFIX << endl;
+      str << "\tjal " << currnd->get_parent() << CLASSINIT_SUFFIX << "\n";
 
     Environment env;
     env.set_cls(currnd);
@@ -1590,17 +1605,11 @@ void let_class::code(ostream &s, Environment &env)
   if (init->is_empty())
   {
     if (type_decl == Str)
-    {
       emit_load_string(ACC, stringtable.lookup_string(""), s);
-    }
     else if (type_decl == Int)
-    {
       emit_load_int(ACC, inttable.lookup_string("0"), s);
-    }
     else if (type_decl == Bool)
-    {
       emit_load_bool(ACC, BoolConst(0), s);
-    }
   }
 
   emit_push(ACC, s);
