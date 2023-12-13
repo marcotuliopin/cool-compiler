@@ -984,7 +984,7 @@ void CgenClassTable::emit_parenttab()
         if (currnd->get_name() == Object) {
             str << WORD << INVALID_CLASSTAG << endl;
         } else {
-            str << WORD << get_class_tag(currnd->get_parent()) << endl;
+            str << WORD << classtags.find(currnd->get_parent()).second << endl;
         }
         
 
