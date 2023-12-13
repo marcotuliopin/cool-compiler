@@ -4,6 +4,8 @@
 #include "cool-tree.h"
 #include "symtab.h"
 
+#include <map>
+
 enum Basicness     {Basic, NotBasic};
 #define TRUE 1
 #define FALSE 0
@@ -21,6 +23,12 @@ private:
    int stringclasstag;
    int intclasstag;
    int boolclasstag;
+   int ioclasstag;
+   int objectclasstag;
+
+   int tagcount;
+
+   std::map<Symbol, int> classtags;
 
 
 // The following methods emit code for
@@ -32,6 +40,7 @@ private:
    void code_select_gc();
    void code_constants();
 
+
 // The following creates an inheritance graph from
 // a list of classes.  The graph is implemented as
 // a tree of `CgenNode', and class names are placed
@@ -42,6 +51,9 @@ private:
    void install_classes(Classes cs);
    void build_inheritance_tree();
    void set_relations(CgenNodeP nd);
+
+   void set_tag(Symbol nm);
+   void traverse_inheritance_tree();
 public:
    CgenClassTable(Classes, ostream& str);
    void code();
@@ -78,3 +90,80 @@ class BoolConst
   void code_ref(ostream&) const;
 };
 
+class Environment {
+    Class_ cls;
+    std::vector<attr_class *> cls_attrs;
+    std::vector<Formal> mth_args;
+    std::vector<Symbol> stack_symbols;
+
+public:
+    Class_ get_cls() {
+        return cls;
+    }
+
+    void set_cls(Class_ cls) {
+        this->cls = cls;
+    }
+
+    int get_cls_attrs_size() {
+        return cls_attrs.size();
+    }
+
+    int get_mth_args_size() {
+        return mth_args.size();
+    }
+
+    void add_cls_attr(attr_class *attr) {
+        cls_attrs.push_back(attr);
+    }
+
+    void add_mth_arg(Formal formal) {
+        mth_args.push_back(formal);
+    }
+
+    void clear_mth_args() {
+        mth_args.clear();
+    }
+
+    void push_stack_symbol(Symbol name) {
+        stack_symbols.push_back(name);
+    }
+
+    void pop_stack_symbol() {
+        stack_symbols.pop_back();
+    }
+
+    // returns symbol's position from the END of the vector or -1 if not found
+    // e.g. if "name" corresponds to the last Symbol of the stack_symbols vector
+    //      the function will return 0
+    int get_let_var_pos_rev(Symbol name) {
+        // the vector is searched in reverse order because 2 symbols with the
+        // same name might have been pushed in the stack
+        for (int i = stack_symbols.size() - 1; i >= 0; i--) {
+            if (stack_symbols[i] == name) {
+                return stack_symbols.size() - 1 - i;
+            }
+        }
+        return -1;
+    }
+
+    // returns argument's position on the vector (starting from 0) or -1 if not found
+    int get_arg_pos(Symbol name) {
+        for (int i = 0; i < (int) mth_args.size(); i++) {
+            if (mth_args[i]->get_name() == name) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    // returns attribute's position on the vector (starting from 0) or -1 if not found
+    int get_cls_attr_pos(Symbol name) {
+        for (int i = 0; i < (int) cls_attrs.size(); i++) {
+            if (cls_attrs[i]->get_name() == name) {
+                return i;
+            }
+        }
+        return -1;
+    }
+};
