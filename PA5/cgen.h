@@ -27,7 +27,6 @@ private:
    int objectclasstag;
 
    int tagcount;
-
    std::map<Symbol, int> classtags;
 
 
@@ -41,6 +40,15 @@ private:
    void code_constants();
 
    void emit_nametab();
+   void emit_methods();
+   void emit_parenttab();
+   void emit_objtab();
+   void emit_dispatchtables();
+   void emit_prototypes();
+   void emit_initializers();
+
+// Checks if the object is a basic class.
+    bool is_basic(Symbol);
 
 
 // The following creates an inheritance graph from

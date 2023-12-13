@@ -711,6 +711,8 @@ CgenClassTable::CgenClassTable(Classes classes, ostream &s) : nds(NULL), str(s)
     Symbol name = c->get_name();
     if (classtags.insert(std::make_pair(name, tagcount)).second)
       tagcount++;
+
+    i = features->next(i);
   }
 
   code();
@@ -918,6 +920,12 @@ void CgenClassTable::code()
   //                   - dispatch tables
   //
 
+  emit_nametab();
+  emit_parenttab();
+  emit_objtab();
+  emit_dispatchtables();
+  emit_prototypes();
+
   if (cgen_debug)
     cout << "coding global text" << endl;
   code_global_text();
@@ -926,6 +934,9 @@ void CgenClassTable::code()
   //                   - object initializer
   //                   - the class methods
   //                   - etc...
+
+  emit_initializers();
+  emit_methods();
 }
 
 CgenNodeP CgenClassTable::root()
@@ -941,30 +952,235 @@ CgenNodeP CgenClassTable::root()
 
 void CgenClassTable::emit_nametab()
 {
-    str << CLASSNAMETAB << LABEL;
+  str << CLASSNAMETAB << LABEL;
 
-    std::queue<CgenNodeP> q;
-    q.push(root());
+  std::queue<CgenNodeP> q;
+  q.push(root());
 
-    while(!q.empty())
+  while (!q.empty())
+  {
+    CgenNodeP currnd = q.front();
+    q.pop();
+
+    str << WORD;
+    stringtable.lookup_string(currnd->get_name()->get_string())->code_ref(str);
+    str << endl;
+
+    childnd = currnd->get_children();
+    while (childnd)
     {
-      CgenNodeP currnd = q.front();
-      q.pop();
+      q.push(childnd->hd());
+      childnd = childnd->tl();
+    }
+  }
+}
 
-      // Do stuff.
-      str << WORD;
-      stringtable.lookup_string((*it)->get_name()->get_string())->code_ref(str);
-      str << endl;
+void CgenClassTable::emit_parenttab()
+{
+    str << CLASSPARENTTAB << LABEL;
+    while(!q.empty()){
+        CgenNodeP currnd = q.front();
+        q.pop();
+        if (currnd->get_name() == Object) {
+            str << WORD << INVALID_CLASSTAG << endl;
+        } else {
+            str << WORD << get_class_tag(currnd->get_parent()) << endl;
+        }
+        
 
-      childnd = currnd->get_children();
-      while (childnd)
+        childnd = currnd->get_children();
+        while (childnd)
+        {
+            q.push(childnd->hd());
+            childnd = childnd->tl();
+        }
+    }
+
+}
+
+void CgenClassTable::emit_methods()
+{
+  std::queue<CgenNodeP> q;
+  q.push(root());
+
+  while (!q.empty())
+  {
+    CgenNodeP currnd = q.front();
+    q.pop();
+
+    Symbol name = currnd->get_name();
+
+    if (!is_basic(name))
+    {
+      Environment env;
+      env.set_cls(currnd);
+      for (auto attr : currnd->all_attrs)
+        env.add_cls_attr(attr);
+
+      Features features = currnd->get_features();
+      int i = features->first();
+      while (features->more(i))
       {
-        q.push(childnd->hd());
-        childnd = childnd->tl();
+        method_class *method = dynamic_cast<method_class *>(features->nth(i));
+        if (method)
+          method->code(str, env);
+
+        i = features->next(i);
       }
+    }
+
+    childnd = currnd->get_children();
+    while (childnd)
+    {
+      q.push(childnd->hd());
+      childnd = childnd->tl();
+    }
+  }
+}
+
+void CgenClassTable::emit_objtab()
+{
+    str << CLASSOBJTAB << LABEL;
+    
+    while(!q.empty()){
+        CgenNodeP currnd = q.front();
+        q.pop();
+
+        str << WORD << currnd->get_name() << PROTOBJ_SUFFIX << endl;
+        str << WORD << currnd->get_name() << CLASSINIT_SUFFIX << endl;
+        
+
+        childnd = currnd->get_children();
+        while (childnd)
+        {
+            q.push(childnd->hd());
+            childnd = childnd->tl();
+        }
     }
 }
 
+void CgenClassTable::emit_dispatchtables()
+{
+
+    while(!q.empty()){
+        CgenNodeP currnd = q.front();
+        q.pop();
+
+
+        str << currnd->get_name() << DISPTAB_SUFFIX << LABEL;
+        get_methods_recursively(currnd, currnd->all_methods);
+
+        for (auto it_m = currnd->all_methods.begin(); it_m != currnd->all_methods.end(); it_m++) {
+            str << WORD << it_m->first->get_name() << "." << it_m->second->get_name() << endl;
+        }
+        
+
+        childnd = currnd->get_children();
+        while (childnd)
+        {
+            q.push(childnd->hd());
+            childnd = childnd->tl();
+        }
+    }
+
+}
+
+void CgenClassTable::emit_prototypes()
+{
+
+    while(!q.empty()){
+        CgenNodeP currnd = q.front();
+        q.pop();
+
+        get_class_attrs_recursively(currnd, currnd->all_attrs);
+
+        str << WORD << "-1" << endl;
+        str << currnd->get_name() << PROTOBJ_SUFFIX << LABEL;
+        str << WORD << i << endl; // class tag
+        str << WORD << DEFAULT_OBJFIELDS + currnd->all_attrs.size() << endl; // object size
+        str << WORD << currnd->get_name() << DISPTAB_SUFFIX << endl;
+
+        for (auto attr : currnd->all_attrs) {
+            Symbol type = attr->get_type_decl();
+            str << WORD;
+            if (type == Int) {
+                inttable.lookup_string("0")->code_ref(str);
+            } else if (type == Bool) {
+                falsebool.code_ref(str);
+            } else if (type == Str) {
+                stringtable.lookup_string("")->code_ref(str);
+            } else {
+                str << "0";
+            }
+            str << endl;
+        }
+
+        childnd = currnd->get_children();
+        while (childnd)
+        {
+            q.push(childnd->hd());
+            childnd = childnd->tl();
+        }
+    }
+}
+
+void CgenClassTable::emit_initializers()
+{
+  std::queue<CgenNodeP> q;
+  q.push(root());
+
+  while (!q.empty())
+  {
+    CgenNodeP currnd = q.front();
+    q.pop();
+
+    str << currnd->get_name() << CLASSINIT_SUFFIX << LABEL;
+
+    emit_addiu(SP, SP, -12, str);
+    emit_store(FP, 3, SP, str);
+    emit_store(SELF, 2, SP, str);
+    emit_store(RA, 1, SP, str);
+    emit_addiu(FP, SP, 4, str);
+    emit_move(SELF, ACC, str);
+
+    if (currnd->get_name() != Object)
+      str << "\tjal " << currnd->get_parent() << CLASSINIT_SUFFIX << endl;
+
+    Environment env;
+    env.set_cls(currnd);
+    for (auto attr : currnd->all_attrs)
+      env.add_cls_attr(attr);
+
+    Features features = currnd->get_features();
+    int i =features->first();
+    while (features->more(i))
+    {
+      attr_class *at = dynamic_cast<attr_class *>(features->nth(i));
+
+      if (at && !at->get_init()->is_empty())
+      {
+        at->get_init()->code(str, env);
+        emit_store(ACC, DEFAULT_OBJFIELDS + env.get_cls_attr_pos(at->get_name()), SELF, str);
+      }
+
+      i = features->next(i);
+    }
+
+    emit_move(ACC, SELF, str);
+    emit_load(FP, 3, SP, str);
+    emit_load(SELF, 2, SP, str);
+    emit_load(RA, 1, SP, str);
+    emit_addiu(SP, SP, 12, str);
+    emit_return(str);
+
+    childnd = currnd->get_children();
+    while (childnd)
+    {
+      q.push(childnd->hd());
+      childnd = childnd->tl();
+    }
+  }
+}
 
 ///////////////////////////////////////////////////////////////////////
 //
