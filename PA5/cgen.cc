@@ -626,10 +626,10 @@ void CgenClassTable::code_constants()
 CgenClassTable::CgenClassTable(Classes classes, ostream& s) : nds(NULL) , str(s)
 {
    stringclasstag = 0 /* Change to your String class tag here */;
-   intclasstag =    0 /* Change to your Int class tag here */;
-   boolclasstag =   0 /* Change to your Bool class tag here */;
-   ioclasstag = 0;
-   objectclasstag = 0;
+   intclasstag =    1 /* Change to your Int class tag here */;
+   boolclasstag =   2 /* Change to your Bool class tag here */;
+   ioclasstag =     3;
+   objectclasstag = 4;
 
    enterscope();
    if (cgen_debug) cout << "Building CgenClassTable" << endl;
