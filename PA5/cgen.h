@@ -5,6 +5,7 @@
 #include "symtab.h"
 
 #include <vector>
+#include <algorithm>
 #include <map>
 
 int label_num = 0;
