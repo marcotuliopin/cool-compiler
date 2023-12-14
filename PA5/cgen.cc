@@ -28,6 +28,8 @@
 #include "cgen.h"
 #include "cgen_gc.h"
 
+CgenNodeP extern_root_access;
+
 extern void emit_string_constant(ostream &str, char *s);
 extern int cgen_debug;
 
@@ -699,6 +701,8 @@ CgenClassTable::CgenClassTable(Classes classes, ostream &s) : nds(NULL), str(s)
   install_classes(classes);
   build_inheritance_tree();
 
+  extern_root_access = root();
+
   // Set tag for each basic class.
   classtags.insert(std::make_pair(Str, stringclasstag));
   classtags.insert(std::make_pair(Int, intclasstag));
@@ -1007,7 +1011,7 @@ bool CgenClassTable::is_basic(Symbol name)
 Class_ get_class_by_name(Symbol name)
 {
   std::queue<CgenNodeP> q;
-  q.push(root());
+  q.push(extern_root_access);
 
   while (!q.empty())
   {
