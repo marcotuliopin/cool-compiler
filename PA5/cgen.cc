@@ -997,8 +997,7 @@ void get_methods(CgenNodeP nd, std::vector<std::pair<Class_, method_class *>> &m
 
 bool CgenClassTable::is_basic(Symbol name)
 {
-  std::vector<Symbol> basics = {Str, Bool, Int, IO, Object};
-  if (std::find(std::begin(basics), std::end(basics), name) != std::end(basics))
+  if (name == Str || name == Bool || name == Int || name == IO || name == Object)
     return true;
   return false;
 }
@@ -1019,7 +1018,7 @@ void CgenClassTable::emit_nametab()
     stringtable.lookup_string(currnd->get_name()->get_string())->code_ref(str);
     str << "\n";
 
-    CgenNodeP childnd = currnd->get_children();
+    auto *childnd = currnd->get_children();
     while (childnd)
     {
       q.push(childnd->hd());
@@ -1037,7 +1036,7 @@ void CgenClassTable::emit_parenttab()
     q.pop();
     if (currnd->get_name() == Object)
     {
-      str << WORD << INVALID_CLASSTAG << "\n";
+      str << WORD << -1 << "\n";
     }
     else
     {
@@ -1045,7 +1044,7 @@ void CgenClassTable::emit_parenttab()
       str << WORD << tag << "\n";
     }
 
-    CgenNodeP childnd = currnd->get_children();
+    auto *childnd = currnd->get_children();
     while (childnd)
     {
       q.push(childnd->hd());
@@ -1085,7 +1084,7 @@ void CgenClassTable::emit_methods()
       }
     }
 
-    CgenNodeP childnd = currnd->get_children();
+    auto *childnd = currnd->get_children();
     while (childnd)
     {
       q.push(childnd->hd());
@@ -1098,6 +1097,9 @@ void CgenClassTable::emit_objtab()
 {
   str << CLASSOBJTAB << LABEL;
 
+  std::queue<CgenNodeP> q;
+  q.push(root());
+
   while (!q.empty())
   {
     CgenNodeP currnd = q.front();
@@ -1106,7 +1108,7 @@ void CgenClassTable::emit_objtab()
     str << WORD << currnd->get_name() << PROTOBJ_SUFFIX << "\n";
     str << WORD << currnd->get_name() << CLASSINIT_SUFFIX << "\n";
 
-    CgenNodeP childnd = currnd->get_children();
+    auto *childnd = currnd->get_children();
     while (childnd)
     {
       q.push(childnd->hd());
@@ -1117,6 +1119,9 @@ void CgenClassTable::emit_objtab()
 
 void CgenClassTable::emit_dispatchtables()
 {
+
+  std::queue<CgenNodeP> q;
+  q.push(root());
 
   while (!q.empty())
   {
@@ -1131,7 +1136,7 @@ void CgenClassTable::emit_dispatchtables()
       str << WORD << it_m->first->get_name() << "." << it_m->second->get_name() << "\n";
     }
 
-    CgenNodeP childnd = currnd->get_children();
+    auto *childnd = currnd->get_children();
     while (childnd)
     {
       q.push(childnd->hd());
@@ -1142,6 +1147,9 @@ void CgenClassTable::emit_dispatchtables()
 
 void CgenClassTable::emit_prototypes()
 {
+
+  std::queue<CgenNodeP> q;
+  q.push(root());
 
   while (!q.empty())
   {
@@ -1171,7 +1179,7 @@ void CgenClassTable::emit_prototypes()
       str << "\n";
     }
 
-    CgenNodeP childnd = currnd->get_children();
+    auto *childnd = currnd->get_children();
     while (childnd)
     {
       q.push(childnd->hd());
@@ -1229,7 +1237,7 @@ void CgenClassTable::emit_initializers()
     emit_addiu(SP, SP, 12, str);
     emit_return(str);
 
-    CgenNodeP childnd = currnd->get_children();
+    auto *childnd = currnd->get_children();
     while (childnd)
     {
       q.push(childnd->hd());
@@ -1522,12 +1530,8 @@ void typcase_class::code(ostream &s, Environment &env)
 
   // $t1 = expr_obj.tag
   emit_load(T1, TAG_OFFSET, ACC, s);
-
-  // everytime we jump back here, T1 contains the tag of a new class
-  // if T1 is ever equal to INVALID_CLASSTAG it means that the case statement
-  // has no match which is a runtime error
   emit_label_def(label_begin, s);
-  emit_load_imm(T2, INVALID_CLASSTAG, s);
+  emit_load_imm(T2, -1, s);
   emit_bne(T1, T2, label_tag_is_valid, s);
   emit_jal("_case_abort", s);
 
