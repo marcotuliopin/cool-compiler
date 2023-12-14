@@ -433,3 +433,4 @@ class Main inherits CellularAutomaton {
       }  ) ); }
     };
 };
+
