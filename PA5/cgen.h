@@ -8,6 +8,8 @@
 #include <map>
 
 int label_num = 0;
+int tagcount;
+std::map<Symbol, int> classtags;
 
 void get_attrs(Class_ cls, std::vector<attr_class *> &attrs);
 void get_methods(Class_ cls, std::vector<std::pair<Class_, method_class *>> &methods);
@@ -32,9 +34,6 @@ private:
    int boolclasstag;
    int ioclasstag;
    int objectclasstag;
-
-   int tagcount;
-   std::map<Symbol, int> classtags;
 
 
 // The following methods emit code for
