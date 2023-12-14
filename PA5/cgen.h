@@ -167,28 +167,37 @@ public:
     //      the function will return 0
     int get_let_var_pos_rev(Symbol name)
     {
-        // the vector is searched in reverse order because 2 symbols with the
-        // same name might have been pushed in the stack
-        for (int i = stack_symbols.size() - 1; i >= 0; i--)
-        {
-            if (stack_symbols[i] == name)
-            {
-                return stack_symbols.size() - 1 - i;
-            }
-        }
-        return -1;
+        auto rpos = std::find(stack_symbols.rbegin(), stack_symbols.rend(), name);
+
+        if (rpos == stack_symbols.rend())
+            return -1;
+
+        int idx = rpos - stack_symbols.rbegin();
+
+        // for (int i = stack_symbols.size() - 1; i >= 0; i--)
+        //     if (stack_symbols[i] == name)
+        //         return stack_symbols.size() - 1 - i;
+        // return -1;
     }
 
-    // returns argument's position on the vector (starting from 0) or -1 if not found
     int get_arg_pos(Symbol name)
     {
-        for (int i = 0; i < (int)mth_args.size(); i++)
-            if (mth_args[i]->get_name() == name)
-                return i;
-        return -1;
+        auto pos = std::find_if(mth_args.begin(), mth_args.end(), [&](const auto& a)
+        {
+            return a->get_name() == name;
+        });
+
+        if (pos == mth_args.end())
+            return -1;
+
+        int idx = pos - mth_args.begin();
+        return idx;
+        // for (int i = 0; i < (int)mth_args.size(); i++)
+        //     if (mth_args[i]->get_name() == name)
+        //         return i;
+        // return -1;
     }
 
-    // returns attribute's position on the vector (starting from 0) or -1 if not found
     int get_cls_attr_pos(Symbol name)
     {
         auto pos = std::find_if(cls_attrs.begin(), cls_attrs.end(), [&](const auto& a)
