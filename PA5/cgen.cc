@@ -1472,18 +1472,12 @@ void dispatch_class::code(ostream &s, Environment &env)
 
   Class_ cls = env.get_cls();
   if (expr->get_type() != SELF_TYPE)
-  {
-    cls = class_map[expr->get_type()];
-  }
+    cls = get_class_by_name(expr->get_type());
 
   int i;
   for (i = 0; i < (int)cls->all_methods.size(); i++)
-  {
     if (cls->all_methods[i].second->get_name() == name)
-    {
       break;
-    }
-  }
 
   // $t1 += offset_to_proper_func
   emit_load(T1, i, T1, s);
