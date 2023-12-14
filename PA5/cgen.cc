@@ -31,6 +31,8 @@
 extern void emit_string_constant(ostream &str, char *s);
 extern int cgen_debug;
 
+extern int label_num;
+
 // extern int disable_reg_alloc;
 extern int node_lineno;
 
@@ -1548,7 +1550,7 @@ void typcase_class::code(ostream &s, Environment &env)
   for (int i = cases->first(); cases->more(i); i = cases->next(i))
   {
     // $t2 = branch_i.tag
-    emit_load_imm(T2, get_class_tag(cases->nth(i)->get_type_decl()), s);
+    emit_load_imm(T2, classtags.at(cases->nth(i)->get_type_decl()), s);
     // if $t1 == $t2 jump to the label for the corresponding branch
     emit_beq(T1, T2, label_num++, s);
   }

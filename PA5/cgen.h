@@ -7,6 +7,8 @@
 #include <vector>
 #include <map>
 
+int label_num = 0;
+
 void get_attrs(Class_ cls, std::vector<attr_class *> &attrs);
 void get_methods(Class_ cls, std::vector<std::pair<Class_, method_class *>> &methods);
 

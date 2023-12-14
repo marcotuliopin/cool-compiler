@@ -22,6 +22,7 @@
 // Global names
 #define CLASSNAMETAB         "class_nameTab"
 #define CLASSOBJTAB          "class_objTab"
+#define CLASSPARENTTAB       "class_parentTab"
 #define INTTAG               "_int_tag"
 #define BOOLTAG              "_bool_tag"
 #define STRINGTAG            "_string_tag"
@@ -71,6 +72,7 @@ Register const A1   = "$a1";		// For arguments to prim funcs
 Register const SELF = "$s0";		// Ptr to self (callee saves) 
 Register const T1   = "$t1";		// Temporary 1 
 Register const T2   = "$t2";		// Temporary 2 
+Register const T3   = "$t3";		// Temporary 3 
 Register const SP   = "$sp";		// Stack pointer 
 Register const FP   = "$fp";		// Frame pointer 
 Register const RA   = "$ra";		// Return address 
