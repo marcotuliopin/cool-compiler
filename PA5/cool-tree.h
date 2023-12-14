@@ -13,6 +13,7 @@
 #include "tree.h"
 #include "cool-tree.handcode.h"
 
+struct Environment;
 class method_class;
 class attr_class;
 
