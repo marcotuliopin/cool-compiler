@@ -1015,7 +1015,7 @@ Class_ get_class_by_name(Symbol name)
     q.pop();
 
     if (currnd->get_name() == name)
-      return *currnd;
+      return currnd;
 
     auto *childnd = currnd->get_children();
     while (childnd)
