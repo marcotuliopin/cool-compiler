@@ -196,7 +196,7 @@ public:
         });
 
         if (pos == cls_attrs.end())
-            return -1
+            return -1;
 
         int idx = pos - cls_attrs.begin();
         return idx;
