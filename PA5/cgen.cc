@@ -1030,6 +1030,10 @@ void CgenClassTable::emit_nametab()
 void CgenClassTable::emit_parenttab()
 {
   str << CLASSPARENTTAB << LABEL;
+
+  std::queue<CgenNodeP> q;
+  q.push(root());
+
   while (!q.empty())
   {
     CgenNodeP currnd = q.front();
@@ -1040,7 +1044,7 @@ void CgenClassTable::emit_parenttab()
     }
     else
     {
-      int tag = classtags.find(currnd->get_parent()).second;
+      int tag = classtags.at(currnd->get_parent());
       str << WORD << tag << "\n";
     }
 
@@ -1160,7 +1164,7 @@ void CgenClassTable::emit_prototypes()
 
     str << WORD << "-1" << "\n";
     str << currnd->get_name() << PROTOBJ_SUFFIX << LABEL;
-    str << WORD << i << "\n";                                         
+    str << WORD << classtags.at(currnd->get_name()) << "\n";                                         
     str << WORD << DEFAULT_OBJFIELDS + currnd->all_attrs.size() << "\n";
     str << WORD << currnd->get_name() << DISPTAB_SUFFIX << "\n";
 
