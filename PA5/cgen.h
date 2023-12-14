@@ -109,10 +109,10 @@ public:
     void code_ref(ostream &) const;
 };
 
-class Environment
+class Env
 {
     Class_ cls;
-    std::vector<attr_class *> cls_attrs;
+    std::vector<attr_class *> class_attrs;
     std::vector<Formal> mth_args;
     std::vector<Symbol> stack_symbols;
 
@@ -127,9 +127,9 @@ public:
         this->cls = cls;
     }
 
-    int get_cls_attrs_size()
+    int get_class_attrs_size()
     {
-        return cls_attrs.size();
+        return class_attrs.size();
     }
 
     int get_mth_args_size()
@@ -139,7 +139,7 @@ public:
 
     void add_cls_attr(attr_class *attr)
     {
-        cls_attrs.push_back(attr);
+        class_attrs.push_back(attr);
     }
 
     void add_mth_arg(Formal formal)
@@ -162,9 +162,6 @@ public:
         stack_symbols.pop_back();
     }
 
-    // returns symbol's position from the END of the vector or -1 if not found
-    // e.g. if "name" corresponds to the last Symbol of the stack_symbols vector
-    //      the function will return 0
     int get_let_var_pos_rev(Symbol name)
     {
         auto rpos = std::find_if(stack_symbols.rbegin(), stack_symbols.rend(), [&](const auto& a)
@@ -177,10 +174,6 @@ public:
 
         int idx = rpos - stack_symbols.rbegin();
         return idx;
-        // for (int i = stack_symbols.size() - 1; i >= 0; i--)
-        //     if (stack_symbols[i] == name)
-        //         return stack_symbols.size() - 1 - i;
-        // return -1;
     }
 
     int get_arg_pos(Symbol name)
@@ -195,27 +188,19 @@ public:
 
         int idx = pos - mth_args.begin();
         return idx;
-        // for (int i = 0; i < (int)mth_args.size(); i++)
-        //     if (mth_args[i]->get_name() == name)
-        //         return i;
-        // return -1;
     }
 
     int get_cls_attr_pos(Symbol name)
     {
-        auto pos = std::find_if(cls_attrs.begin(), cls_attrs.end(), [&](const auto& a)
+        auto pos = std::find_if(class_attrs.begin(), class_attrs.end(), [&](const auto& a)
         {
             return a->get_name() == name;
         });
 
-        if (pos == cls_attrs.end())
+        if (pos == class_attrs.end())
             return -1;
 
-        int idx = pos - cls_attrs.begin();
+        int idx = pos - class_attrs.begin();
         return idx;
-        // for (int i = 0; i < (int)cls_attrs.size(); i++)
-        //     if (cls_attrs[i]->get_name() == name)
-        //         return i;
-        // return -1;
     }
 };

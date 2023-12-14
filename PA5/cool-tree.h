@@ -13,7 +13,7 @@
 #include "tree.h"
 #include "cool-tree.handcode.h"
 
-struct Environment;
+struct Env;
 class method_class;
 class attr_class;
 
@@ -22,14 +22,14 @@ class attr_class;
 Symbol type;                                 \
 Symbol get_type() { return type; }           \
 Expression set_type(Symbol s) { type = s; return this; } \
-virtual void code(ostream&, Environment&) = 0; \
+virtual void code(ostream&, Env&) = 0; \
 virtual void dump_with_types(ostream&,int) = 0;  \
 void dump_type(ostream&, int);               \
 Expression_class() { type = (Symbol) NULL; }
 
 #undef Expression_SHARED_EXTRAS
 #define Expression_SHARED_EXTRAS           \
-void code(ostream&, Environment&); 			   \
+void code(ostream&, Env&); 			   \
 void dump_with_types(ostream&,int); 
 
 
@@ -227,7 +227,7 @@ public:
    {
       return name;
    }
-   void code(ostream &, Environment &);
+   void code(ostream &, Env &);
 #ifdef Feature_SHARED_EXTRAS
    Feature_SHARED_EXTRAS
 #endif
