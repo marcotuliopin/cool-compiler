@@ -713,7 +713,7 @@ CgenClassTable::CgenClassTable(Classes classes, ostream &s) : nds(NULL), str(s)
     if (classtags.insert(std::make_pair(name, tagcount)).second)
       tagcount++;
 
-    i = features->next(i);
+    i = classes->next(i);
   }
 
   code();
@@ -954,7 +954,7 @@ CgenNodeP CgenClassTable::root()
 void get_attrs(CgenNodeP nd, std::vector<attr_class *> &attrs)
 {
   if (nd->get_name() != Object)
-    get_attrs(class_map[nd->get_parent()], attrs);
+    get_attrs(nd->get_parentnd(), attrs);
 
   Features eatures = nd->get_features();
   for (int i = features->first(); features->more(i); i = features->next(i))
@@ -968,7 +968,7 @@ void get_attrs(CgenNodeP nd, std::vector<attr_class *> &attrs)
 void get_methods(CgenNodeP nd, std::vector<std::pair<Class_, method_class *>> &methods)
 {
   if (nd->get_name() != Object)
-    get_methods(class_map[nd->get_parent()], methods);
+    get_methods(nd->get_parentnd(), methods);
 
   Features features = nd->get_features();
 
