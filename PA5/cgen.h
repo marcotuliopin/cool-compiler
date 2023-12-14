@@ -176,7 +176,7 @@ public:
             return -1;
 
         int idx = rpos - stack_symbols.rbegin();
-
+        return idx;
         // for (int i = stack_symbols.size() - 1; i >= 0; i--)
         //     if (stack_symbols[i] == name)
         //         return stack_symbols.size() - 1 - i;
