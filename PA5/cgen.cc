@@ -956,7 +956,7 @@ void get_attrs(CgenNodeP nd, std::vector<attr_class *> &attrs)
   if (nd->get_name() != Object)
     get_attrs(nd->get_parentnd(), attrs);
 
-  Features eatures = nd->get_features();
+  Features features = nd->get_features();
   for (int i = features->first(); features->more(i); i = features->next(i))
   {
     attr_class *at = dynamic_cast<attr_class *>(features->nth(i));
@@ -986,7 +986,7 @@ void get_methods(CgenNodeP nd, std::vector<std::pair<Class_, method_class *>> &m
       if (it->second->get_name() == method->get_name())
       {
         name_already_exists = true;
-        it->first = cls;
+        it->first = nd;
       }
     }
 
@@ -997,17 +997,10 @@ void get_methods(CgenNodeP nd, std::vector<std::pair<Class_, method_class *>> &m
 
 bool CgenClassTable::is_basic(Symbol name)
 {
-  switch (name)
-  {
-  case Str:
-  case Bool:
-  case Int:
-  case IO:
-  case Object:
+  std::vector<Symbol> basics = {Str, Bool, Int, IO, Object};
+  if (std::find(std::begin(basics), std::end(basics), name) != std::end(basics))
     return true;
-  default:
-    return false;
-  }
+  return false;
 }
 
 void CgenClassTable::emit_nametab()
@@ -1026,7 +1019,7 @@ void CgenClassTable::emit_nametab()
     stringtable.lookup_string(currnd->get_name()->get_string())->code_ref(str);
     str << "\n";
 
-    childnd = currnd->get_children();
+    CgenNodeP childnd = currnd->get_children();
     while (childnd)
     {
       q.push(childnd->hd());
@@ -1052,7 +1045,7 @@ void CgenClassTable::emit_parenttab()
       str << WORD << tag << "\n";
     }
 
-    childnd = currnd->get_children();
+    CgenNodeP childnd = currnd->get_children();
     while (childnd)
     {
       q.push(childnd->hd());
@@ -1092,7 +1085,7 @@ void CgenClassTable::emit_methods()
       }
     }
 
-    childnd = currnd->get_children();
+    CgenNodeP childnd = currnd->get_children();
     while (childnd)
     {
       q.push(childnd->hd());
@@ -1113,7 +1106,7 @@ void CgenClassTable::emit_objtab()
     str << WORD << currnd->get_name() << PROTOBJ_SUFFIX << "\n";
     str << WORD << currnd->get_name() << CLASSINIT_SUFFIX << "\n";
 
-    childnd = currnd->get_children();
+    CgenNodeP childnd = currnd->get_children();
     while (childnd)
     {
       q.push(childnd->hd());
@@ -1138,7 +1131,7 @@ void CgenClassTable::emit_dispatchtables()
       str << WORD << it_m->first->get_name() << "." << it_m->second->get_name() << "\n";
     }
 
-    childnd = currnd->get_children();
+    CgenNodeP childnd = currnd->get_children();
     while (childnd)
     {
       q.push(childnd->hd());
@@ -1178,7 +1171,7 @@ void CgenClassTable::emit_prototypes()
       str << "\n";
     }
 
-    childnd = currnd->get_children();
+    CgenNodeP childnd = currnd->get_children();
     while (childnd)
     {
       q.push(childnd->hd());
@@ -1236,7 +1229,7 @@ void CgenClassTable::emit_initializers()
     emit_addiu(SP, SP, 12, str);
     emit_return(str);
 
-    childnd = currnd->get_children();
+    CgenNodeP childnd = currnd->get_children();
     while (childnd)
     {
       q.push(childnd->hd());
