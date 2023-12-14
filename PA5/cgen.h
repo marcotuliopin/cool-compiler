@@ -109,7 +109,7 @@ public:
     void code_ref(ostream &) const;
 };
 
-class Env
+class Context
 {
     Class_ cls;
     std::vector<attr_class *> class_attrs;

@@ -184,6 +184,14 @@ Uso de Tipo Desconhecido: No método "let_example" da classe Principal, um tipo 
 
 Definição de Classe Incompleta: O código inclui a classe "IncompleteClass," que não possui uma chave de fechamento para encerrar adequadamente a definição da classe. Isso representa um erro comum ao definir classes.
 
+--------------------------
 
+## Seção 3 : Gerador de Código
+
+**Marco Túlio de Pinho e Raul Araju**
+
+--------------------------
+
+Começamos nossa explicação 
 
 

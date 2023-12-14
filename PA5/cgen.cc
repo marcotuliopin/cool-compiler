@@ -1099,7 +1099,7 @@ void CgenClassTable::emit_methods()
 
     if (!is_basic(name))
     {
-      Env env;
+      Context env;
       env.set_cls(currnd);
       for (auto attr : currnd->all_attrs)
         env.add_cls_attr(attr);
@@ -1242,7 +1242,7 @@ void CgenClassTable::emit_initializers()
     if (currnd->get_name() != Object)
       str << "\tjal " << currnd->get_parent() << CLASSINIT_SUFFIX << "\n";
 
-    Env env;
+    Context env;
     env.set_cls(currnd);
     for (auto attr : currnd->all_attrs)
       env.add_cls_attr(attr);
@@ -1301,7 +1301,7 @@ CgenNode::CgenNode(Class_ nd, Basicness bstatus, CgenClassTableP ct) : class__cl
 //   constant integers, strings, and booleans are provided.
 //
 //*****************************************************************
-void method_class::code(ostream &s, Env &env)
+void method_class::code(ostream &s, Context &env)
 {
   emit_method_ref(env.get_cls()->get_name(), name, s);
   s << LABEL;
@@ -1332,7 +1332,7 @@ void method_class::code(ostream &s, Env &env)
   s << RET << "\n";
 }
 
-void assign_class::code(ostream &s, Env &env)
+void assign_class::code(ostream &s, Context &env)
 {
   expr->code(s, env);
   int pos, offset;
@@ -1380,7 +1380,7 @@ void assign_class::code(ostream &s, Env &env)
   }
 }
 
-void static_dispatch_class::code(ostream &s, Env &env)
+void static_dispatch_class::code(ostream &s, Context &env)
 {
   int num_params = 0;
 
@@ -1421,7 +1421,7 @@ void static_dispatch_class::code(ostream &s, Env &env)
     env.pop_stack_symbol();
 }
 
-void dispatch_class::code(ostream &s, Env &env)
+void dispatch_class::code(ostream &s, Context &env)
 {
   int num_params = 0;
 
@@ -1466,7 +1466,7 @@ void dispatch_class::code(ostream &s, Env &env)
   }
 }
 
-void cond_class::code(ostream &s, Env &env)
+void cond_class::code(ostream &s, Context &env)
 {
   pred->code(s, env);
   emit_fetch_int(T1, ACC, s);
@@ -1484,7 +1484,7 @@ void cond_class::code(ostream &s, Env &env)
   emit_label_def(label_end, s);
 }
 
-void loop_class::code(ostream &s, Env &env)
+void loop_class::code(ostream &s, Context &env)
 {
   int label_loop = label_num++;
   int label_exit = label_num++;
@@ -1504,7 +1504,7 @@ void loop_class::code(ostream &s, Env &env)
   emit_move(ACC, ZERO, s);
 }
 
-void typcase_class::code(ostream &s, Env &env)
+void typcase_class::code(ostream &s, Context &env)
 {
   expr->code(s, env);
 
@@ -1567,13 +1567,13 @@ void typcase_class::code(ostream &s, Env &env)
   emit_addiu(SP, SP, 4, s);
 }
 
-void block_class::code(ostream &s, Env &env)
+void block_class::code(ostream &s, Context &env)
 {
   for (int i = body->first(); body->more(i); i = body->next(i))
     body->nth(i)->code(s, env);
 }
 
-void let_class::code(ostream &s, Env &env)
+void let_class::code(ostream &s, Context &env)
 {
   init->code(s, env);
 
@@ -1596,7 +1596,7 @@ void let_class::code(ostream &s, Env &env)
   env.pop_stack_symbol();
 }
 
-void plus_class::code(ostream &s, Env &env)
+void plus_class::code(ostream &s, Context &env)
 {
   e1->code(s, env);
   emit_push(ACC, s);
@@ -1618,7 +1618,7 @@ void plus_class::code(ostream &s, Env &env)
   emit_store(T3, 3, ACC, s);
 }
 
-void sub_class::code(ostream &s, Env &env)
+void sub_class::code(ostream &s, Context &env)
 {
   e1->code(s, env);
   emit_push(ACC, s);
@@ -1640,7 +1640,7 @@ void sub_class::code(ostream &s, Env &env)
   emit_store(T3, 3, ACC, s);
 }
 
-void mul_class::code(ostream &s, Env &env)
+void mul_class::code(ostream &s, Context &env)
 {
   e1->code(s, env);
   emit_push(ACC, s);
@@ -1662,7 +1662,7 @@ void mul_class::code(ostream &s, Env &env)
   emit_store(T3, 3, ACC, s);
 }
 
-void divide_class::code(ostream &s, Env &env)
+void divide_class::code(ostream &s, Context &env)
 {
   e1->code(s, env);
   emit_push(ACC, s);
@@ -1684,7 +1684,7 @@ void divide_class::code(ostream &s, Env &env)
   emit_store(T3, 3, ACC, s);
 }
 
-void neg_class::code(ostream &s, Env &env)
+void neg_class::code(ostream &s, Context &env)
 {
   e1->code(s, env);
   emit_jal("Object.copy", s);
@@ -1694,7 +1694,7 @@ void neg_class::code(ostream &s, Env &env)
   emit_store(T1, 3, ACC, s);
 }
 
-void lt_class::code(ostream &s, Env &env)
+void lt_class::code(ostream &s, Context &env)
 {
   e1->code(s, env);
   emit_push(ACC, s);
@@ -1718,7 +1718,7 @@ void lt_class::code(ostream &s, Env &env)
   emit_label_def(label_num++, s);
 }
 
-void eq_class::code(ostream &s, Env &env)
+void eq_class::code(ostream &s, Context &env)
 {
   e1->code(s, env);
   emit_push(ACC, s);
@@ -1746,7 +1746,7 @@ void eq_class::code(ostream &s, Env &env)
   emit_label_def(label_num++, s);
 }
 
-void leq_class::code(ostream &s, Env &env)
+void leq_class::code(ostream &s, Context &env)
 {
   e1->code(s, env);
   emit_push(ACC, s);
@@ -1770,7 +1770,7 @@ void leq_class::code(ostream &s, Env &env)
   emit_label_def(label_num++, s);
 }
 
-void comp_class::code(ostream &s, Env &env)
+void comp_class::code(ostream &s, Context &env)
 {
   e1->code(s, env);
   emit_fetch_int(T1, ACC, s);
@@ -1783,22 +1783,22 @@ void comp_class::code(ostream &s, Env &env)
   emit_label_def(label_num++, s);
 }
 
-void int_const_class::code(ostream &s, Env &env)
+void int_const_class::code(ostream &s, Context &env)
 {
   emit_load_int(ACC, inttable.lookup_string(token->get_string()), s);
 }
 
-void string_const_class::code(ostream &s, Env &env)
+void string_const_class::code(ostream &s, Context &env)
 {
   emit_load_string(ACC, stringtable.lookup_string(token->get_string()), s);
 }
 
-void bool_const_class::code(ostream &s, Env &env)
+void bool_const_class::code(ostream &s, Context &env)
 {
   emit_load_bool(ACC, BoolConst(val), s);
 }
 
-void new__class::code(ostream &s, Env &env)
+void new__class::code(ostream &s, Context &env)
 {
   if (type_name != SELF_TYPE)
   {
@@ -1827,7 +1827,7 @@ void new__class::code(ostream &s, Env &env)
   emit_jalr(T1, s);
 }
 
-void isvoid_class::code(ostream &s, Env &env)
+void isvoid_class::code(ostream &s, Context &env)
 {
   e1->code(s, env);
   emit_move(T1, ACC, s);
@@ -1840,12 +1840,12 @@ void isvoid_class::code(ostream &s, Env &env)
   emit_label_def(label_num++, s);
 }
 
-void no_expr_class::code(ostream &s, Env &env)
+void no_expr_class::code(ostream &s, Context &env)
 {
   emit_move(ACC, ZERO, s);
 }
 
-void object_class::code(ostream &s, Env &env)
+void object_class::code(ostream &s, Context &env)
 {
   int pos;
 
