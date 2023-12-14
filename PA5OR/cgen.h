@@ -23,10 +23,6 @@ private:
     int intclasstag;
     int boolclasstag;
 
-    int tagcount;
-
-    std::map<Symbol, int> classtags;
-
 
     // The following methods emit code for
     // constants and global declarations.

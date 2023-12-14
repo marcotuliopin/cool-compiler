@@ -4,7 +4,11 @@
 #include "cool-tree.h"
 #include "symtab.h"
 
+#include <vector>
 #include <map>
+
+void get_attrs(Class_ cls, std::vector<attr_class *> &attrs);
+void get_methods(Class_ cls, std::vector<std::pair<Class_, method_class *>> &methods);
 
 enum Basicness     {Basic, NotBasic};
 #define TRUE 1
@@ -48,7 +52,7 @@ private:
    void emit_initializers();
 
 // Checks if the object is a basic class.
-    bool is_basic(Symbol);
+    bool is_basic(Symbol name);
 
 
 // The following creates an inheritance graph from
