@@ -167,7 +167,10 @@ public:
     //      the function will return 0
     int get_let_var_pos_rev(Symbol name)
     {
-        auto rpos = std::find(stack_symbols.rbegin(), stack_symbols.rend(), name);
+        auto rpos = std::find_if(stack_symbols.rbegin(), stack_symbols.rend(), [&](const auto& a)
+        {
+            return a == name;
+        });
 
         if (rpos == stack_symbols.rend())
             return -1;
