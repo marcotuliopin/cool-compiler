@@ -1004,6 +1004,29 @@ bool CgenClassTable::is_basic(Symbol name)
   return false;
 }
 
+Class_ get_class_by_name(Symbol name)
+{
+  std::queue<CgenNodeP> q;
+  q.push(root());
+
+  while (!q.empty())
+  {
+    CgenNodeP currnd = q.front();
+    q.pop();
+
+    if (currnd->get_name() == name)
+      return *currnd;
+
+    auto *childnd = currnd->get_children();
+    while (childnd)
+    {
+      q.push(childnd->hd());
+      childnd = childnd->tl();
+    }
+  }
+
+}
+
 void CgenClassTable::emit_nametab()
 {
   str << CLASSNAMETAB << LABEL;
@@ -1387,7 +1410,7 @@ void static_dispatch_class::code(ostream &s, Environment &env)
   // $t1 = type_name_dispatch_pointer
   emit_load_address(T1, (char *)(std::string(type_name->get_string()) + DISPTAB_SUFFIX).c_str(), s);
 
-  Class_ cls = class_map[type_name];
+  Class_ cls = get_class_by_name(type_name);
 
   int i;
   for (i = 0; i < (int)cls->all_methods.size(); i++)

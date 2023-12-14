@@ -11,6 +11,7 @@ int label_num = 0;
 
 void get_attrs(Class_ cls, std::vector<attr_class *> &attrs);
 void get_methods(Class_ cls, std::vector<std::pair<Class_, method_class *>> &methods);
+Class_ get_class_by_name(Symbol name);
 
 enum Basicness     {Basic, NotBasic};
 #define TRUE 1
@@ -53,7 +54,7 @@ private:
    void emit_prototypes();
    void emit_initializers();
 
-// Checks if the object is a basic class.
+// Helper functions.
     bool is_basic(Symbol name);
 
 
